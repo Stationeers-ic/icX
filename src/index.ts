@@ -1,11 +1,11 @@
-import {parseScript, Program} from 'esprima';
+import {parseModule, Program} from 'esprima';
 import {Directive, ModuleDeclaration, Statement} from "estree";
 import {PrepareFunctions} from "./Parsers/PrepareFunctions";
 import {PrepareVars} from "./Parsers/PrepareVars";
 import {PrepareNewFunctions} from "./Parsers/PrepareNewFunctions";
 import {PrepareWhile} from "./Parsers/PrepareWhile";
 import {Vars} from "./Storages/Vars";
-import {Err} from "./Exceptions/Err";
+import {Err, Errors} from "./Exceptions/Err";
 import {uses} from "./types";
 
 
@@ -13,16 +13,20 @@ export class IcX {
     public lines: string[] = [];
     public vars = new Vars(this)
     public use = new Set<uses>()
+    public errors = new Errors()
 
     constructor() {
 
     }
 
     run(code: string) {
-        console.log(code)
-        const program = parseScript(code, {comment: true, loc: true})
-        return this.compile(program)
-        // console.log(JSON.stringify(program, null, 2))
+        const program = parseModule(code, {comment: true, loc: true})
+        console.log(program)
+        const ic10 = this.compile(program)
+        if (this.errors.isError()) {
+            console.log(this.errors.getUserMessage())
+        }
+        return ic10
     }
 
     compile(program: Program): string {
@@ -34,27 +38,31 @@ export class IcX {
     }
 
     public prepareItem(value: (Directive | Statement | ModuleDeclaration), index: number, array: (Directive | Statement | ModuleDeclaration)[]) {
-        if (value['type'] === 'ExpressionStatement') {
-            new PrepareFunctions(this, value, index, array)
-        } else if (value['type'] === 'VariableDeclaration') {
-            new PrepareVars(this, value, index, array)
-        } else if (value['type'] === 'FunctionDeclaration') {
-            new PrepareNewFunctions(this, value, index, array)
-        } else if (value['type'] === 'WhileStatement') {
-            new PrepareWhile(this, value, index, array)
-        } else if (value['type'] === 'ImportDeclaration') {
-            throw new Err(200, value.loc?.start.line, 'Import not supported')
-        } else if (value['type'] === 'ExportNamedDeclaration') {
-            throw new Err(200, value.loc?.start.line, 'Export not supported')
-        } else if (value['type'] === 'ExportDefaultDeclaration') {
-            throw new Err(200, value.loc?.start.line, 'Export not supported')
-        } else if (value['type'] === 'ExportAllDeclaration') {
-            throw new Err(200, value.loc?.start.line, 'Export not supported')
-        } else if (value['type'] === 'ClassDeclaration') {
-            throw new Err(200, value.loc?.start.line, 'Class not supported')
+        // @ts-ignore
+        try {
+            if (value['type'] === 'ExpressionStatement') {
+                new PrepareFunctions(this, value, index, array)
+            } else if (value['type'] === 'VariableDeclaration') {
+                new PrepareVars(this, value, index, array)
+            } else if (value['type'] === 'FunctionDeclaration') {
+                new PrepareNewFunctions(this, value, index, array)
+            } else if (value['type'] === 'WhileStatement') {
+                new PrepareWhile(this, value, index, array)
+            } else if (value['type'] === 'ImportDeclaration') {
+                throw new Err(902, value.loc, 'Import, not supported')
+            } else if (value['type'] === 'ExportNamedDeclaration') {
+                throw new Err(902, value.loc, 'Export, not supported')
+            } else if (value['type'] === 'ExportDefaultDeclaration') {
+                throw new Err(902, value.loc, 'Export, not supported')
+            } else if (value['type'] === 'ExportAllDeclaration') {
+                throw new Err(902, value.loc, 'Export, not supported')
+            } else if (value['type'] === 'ClassDeclaration') {
+                throw new Err(902, value.loc, 'Class, not supported')
+            }
+        } catch (e) {
+            if (e instanceof Err) {
+                this.errors.push(e)
+            }
         }
-
     }
-
-
 }

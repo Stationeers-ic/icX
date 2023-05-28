@@ -1,5 +1,6 @@
 import {Directive, Expression, ExpressionMap, ModuleDeclaration, Statement} from "estree";
-import {IcX, uses} from "../index";
+import {IcX} from "../index";
+import {uses} from "../types";
 
 export abstract class Prepare {
     protected Element: any

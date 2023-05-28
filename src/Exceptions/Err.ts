@@ -1,22 +1,23 @@
 import ErrorCodes from "./errorCodes"
+import {SourceLocation} from "estree";
 
 export class Err {
 
     //  сторона ошибки      lvl        номер
     //      0                0           00
-    static parse           = 100 // ошибка в парсере
-    static syntax          = 200 // ошибка в коде пользователя
-    static ic10            = 300 // ошибка в скомпилированном 1с10
-    static math            = 400 // ошибка в математике
-    static other           = 500 //
-    static iternal         = 900 //
+    static parse = 100 // ошибка в парсере
+    static syntax = 200 // ошибка в коде пользователя
+    static ic10 = 300 // ошибка в скомпилированном 1с10
+    static math = 400 // ошибка в математике
+    static other = 500 //
+    static internal = 900 //
     public message: string = ''
-    public code: number    = 0
-    public line: number    = 0
-    public lvl: string     = ''
-    public group: string   = ''
+    public code: number = 0
+    public line: number = -2
+    public lvl: string = ''
+    public group: string = ''
 
-    constructor(code: number, line: number = -2, ...params: string[]) {
+    constructor(code: number, public loc: SourceLocation | null | undefined, ...params: string[]) {
         this.code = code
         if (this.code in ErrorCodes) {
             this.message = ErrorCodes[this.code]
@@ -26,27 +27,27 @@ export class Err {
         params.forEach((txt, i) => {
             this.message = this.message.replace(`{${i}}`, txt)
         });
-
-        this.line = line
+        if (this.loc)
+            this.line = this.loc.start.line - 1
         this.analyze()
     }
 
     analyze() {
         let c = 0;
         if (this.code >= Err.other) {
-            c          = this.code - Err.other
+            c = this.code - Err.other
             this.group = 'Other'
         } else if (this.code >= Err.math) {
-            c          = this.code - Err.math
+            c = this.code - Err.math
             this.group = 'Math'
         } else if (this.code >= Err.ic10) {
-            c          = this.code - Err.ic10
+            c = this.code - Err.ic10
             this.group = 'ic10'
         } else if (this.code >= Err.syntax) {
-            c          = this.code - Err.syntax
+            c = this.code - Err.syntax
             this.group = 'Syntax'
         } else if (this.code >= Err.parse) {
-            c          = this.code - Err.parse
+            c = this.code - Err.parse
             this.group = 'Parse'
         } else {
             this.group = 'Other'

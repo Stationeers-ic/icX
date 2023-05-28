@@ -1,6 +1,7 @@
 import {Prepare} from "./Prepare";
 import {CallExpression, ExpressionStatement, Identifier} from "estree";
 import {isUses} from "../types";
+import {Err} from "../Exceptions/Err";
 
 export class PrepareFunctions extends Prepare {
     declare protected Element: ExpressionStatement
@@ -17,48 +18,34 @@ export class PrepareFunctions extends Prepare {
     prepareCallee(expression: CallExpression) {
         switch (expression.callee.type) {
             case "Identifier":
-                console.log(expression.callee)
                 this.prepareNamedFunction(expression, expression.callee)
                 break;
             case "MemberExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "Super":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "CallExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "ThisExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "FunctionExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "ArrowFunctionExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "ObjectExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "ArrayExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "Literal":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "TemplateLiteral":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "TaggedTemplateExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "UnaryExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
             case "BinaryExpression":
-                console.log(expression)
-                break;
+                throw new Err(956, expression.loc, expression.type);
 
         }
     }

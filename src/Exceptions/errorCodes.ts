@@ -16,7 +16,8 @@ export const ErrorCodes: { [errorCode: number]: string } = Object.freeze(
         210: "return is not inside the function",
         211: "duplicated aliases in function {0}",
 
-
-        901: "Iternal constant use variable",
+        902: "It is forbidden to use {0}",
+        901: "Internal constant use variable",
+        956: "No implementation for function {0}",
     })
 export default ErrorCodes

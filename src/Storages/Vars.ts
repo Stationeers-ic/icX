@@ -31,10 +31,10 @@ export class Vars {
         let result:Variable;
         if (!/^[a-zA-Z_]\w*/.test(from))
             //TODO             ↓
-            throw new Err(205, 0, from, '')
+            throw new Err(205, null, from, '')
         if (this.exists(from))
             //TODO             ↓
-            throw new Err(204, 0, from, '')
+            throw new Err(204, null, from, '')
         else
             result = new Variable(this.scope, from, this.empty.shift() ?? "null", temp)
 
@@ -53,10 +53,10 @@ export class Vars {
         let result;
         if (!/^[a-zA-Z_]\w*/.test(from))
             //TODO             ↓
-            throw new Err(205, 0, from, '')
+            throw new Err(205, null, from, '')
         if (this.exists(from))
             //TODO             ↓
-            throw new Err(204, 0, from, '')
+            throw new Err(204, null, from, '')
         else
             result = new Variable(this.scope, from, String(to), temp, constant)
         this.aliases.push(result)
