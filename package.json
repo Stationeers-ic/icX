@@ -2,11 +2,11 @@
 	"name": "icx-compiler",
 	"version": "2.1.6",
 	"description": "Compiler icX to ic10 ",
-	"main": "index.js",
+	"main": "src/index.js",
 	"scripts": {
 		"build": "babel src -d src",
 		"whatch": "tsc -w",
-		"test": "node test.js",
+		"test": "ts-node ./tests/test.ts",
 		"jest": "jest tests/jest.js",
 		"debug": "nodemon -w ./ -e js,icX jest"
 	},
@@ -21,7 +21,7 @@
 	],
 	"files": [
 		"src/*",
-		"index.ts",
+		"src/index.ts",
 		"index.d.ts",
 		"index.js",
 		"index.js.map",
@@ -38,7 +38,9 @@
 	"author": "Traineratwot",
 	"license": "MIT",
 	"dependencies": {
-		"@scicave/math-parser": "^5.1.0"
+		"@scicave/math-parser": "^5.1.0",
+		"@types/esprima": "^4.0.3",
+		"esprima": "^4.0.1"
 	},
 	"devDependencies": {
 		"@jest/globals": "^29.3.1",

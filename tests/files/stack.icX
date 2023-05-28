@@ -1,4 +1,0 @@
-var a = 1
-var b = 2
-const c = 7
-stack a b c 32 r17

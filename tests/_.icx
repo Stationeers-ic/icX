@@ -1,4 +1,0 @@
-var foo = 1
-var bar
-bar = seq(foo,1)
-debug barnpm
