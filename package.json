@@ -13,7 +13,7 @@
 	"transform": {
 		"\\.js$": "<rootDir>/node_modules/babel-jest"
 	},
-	"homepage": "https://github.com/Traineratwot/icX",
+	"homepage": "https://github.com/Stationeers-ic/icX",
 	"keywords": [
 		"ic10",
 		"icX",
