@@ -1,23 +1,27 @@
 import {parseScript, Program} from 'esprima';
 import {Directive, ModuleDeclaration, Statement} from "estree";
-import {PrepareFunctions} from "./parsers/PrepareFunctions";
-import {PrepareVars} from "./parsers/PrepareVars";
-import {PrepareNewFunctions} from "./parsers/PrepareNewFunctions";
-import {PrepareWhile} from "./parsers/PrepareWhile";
-import {Vars} from "./storages/Vars";
-import {SyntaxException} from "./Exceptions/SyntaxException";
+import {PrepareFunctions} from "./Parsers/PrepareFunctions";
+import {PrepareVars} from "./Parsers/PrepareVars";
+import {PrepareNewFunctions} from "./Parsers/PrepareNewFunctions";
+import {PrepareWhile} from "./Parsers/PrepareWhile";
+import {Vars} from "./Storages/Vars";
+import {Err} from "./Exceptions/Err";
+import {uses} from "./types";
+
 
 export class IcX {
     public lines: string[] = [];
-    public vars = new Vars()
+    public vars = new Vars(this)
+    public use = new Set<uses>()
 
     constructor() {
+
     }
 
     run(code: string) {
         console.log(code)
         const program = parseScript(code, {comment: true, loc: true})
-        this.compile(program)
+        return this.compile(program)
         // console.log(JSON.stringify(program, null, 2))
     }
 
@@ -39,15 +43,15 @@ export class IcX {
         } else if (value['type'] === 'WhileStatement') {
             new PrepareWhile(this, value, index, array)
         } else if (value['type'] === 'ImportDeclaration') {
-            throw new SyntaxException('Import not supported')
+            throw new Err(200, value.loc?.start.line, 'Import not supported')
         } else if (value['type'] === 'ExportNamedDeclaration') {
-            throw new SyntaxException('Export not supported')
+            throw new Err(200, value.loc?.start.line, 'Export not supported')
         } else if (value['type'] === 'ExportDefaultDeclaration') {
-            throw new SyntaxException('Export not supported')
+            throw new Err(200, value.loc?.start.line, 'Export not supported')
         } else if (value['type'] === 'ExportAllDeclaration') {
-            throw new SyntaxException('Export not supported')
+            throw new Err(200, value.loc?.start.line, 'Export not supported')
         } else if (value['type'] === 'ClassDeclaration') {
-            throw new SyntaxException('Class not supported')
+            throw new Err(200, value.loc?.start.line, 'Class not supported')
         }
 
     }
