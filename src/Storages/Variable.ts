@@ -3,9 +3,11 @@ import {IcX} from "../index";
 export class Variable {
     ready: boolean = true
     public initValue?: any
+    public constant: boolean
     defaultValue: any;
 
-    constructor(public scope: IcX, public from: string, public to: string, public temp = false, public constant = false) {
+    constructor(public scope: IcX, public from: string, public to: string, public temp = false, constant = false) {
+        this.constant = constant
     }
 
     release() {

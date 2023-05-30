@@ -14,24 +14,23 @@ export class IcX {
     public vars = new Vars(this)
     public use = new Set<uses>()
     public errors = new Errors()
+    public program: Program;
 
-    constructor() {
-
+    constructor(code: string) {
+        this.program = parseModule(code, {comment: true, loc: true})
     }
 
-    run(code: string) {
-        const program = parseModule(code, {comment: true, loc: true})
-        console.log(program)
-        const ic10 = this.compile(program)
+    run() {
+        const ic10 = this.compile()
         if (this.errors.isError()) {
             console.log(this.errors.getUserMessage())
         }
         return ic10
     }
 
-    compile(program: Program): string {
+    compile(): string {
         this.lines = []
-        program.body.forEach((value, index, array) => {
+        this.program.body.forEach((value, index, array) => {
             this.prepareItem(value, index, array)
         })
         return this.lines.join("\n")
