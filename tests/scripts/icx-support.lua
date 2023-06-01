@@ -9,20 +9,13 @@ end
 Device = {}
 --тело класса
 function Device:new()
-    local public = {}
-    -- метод get
-    function public:get(key)
-        return self[key]
-    end
-    -- метод set
-    function public:set(key, value)
-        self[key] = value
-    end
+    -- свойства
+    local obj = {}
 
     --чистая магия!
-    setmetatable(public, self)
+    setmetatable(obj, self)
     self.__index = self;
-    return public
+    return obj
 end
 
 d0 = Device:new()

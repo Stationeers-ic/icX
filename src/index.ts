@@ -8,7 +8,6 @@ import {PrepareCallFunctions} from "./Parsers/PrepareCallFunctions";
 import {PrepareGoto} from "./Parsers/PrepareGoto";
 import {PrepareLabel} from "./Parsers/PrepareLabel";
 
-
 export class IcX {
     public lines: string[] = [];
     public vars = new Vars(this)
