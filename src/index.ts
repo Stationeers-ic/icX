@@ -4,6 +4,7 @@ import {uses} from "./types";
 import * as lua from "luaparse"
 import {Chunk} from "luaparse/lib/ast";
 import {PrepareVars} from "./Parsers/PrepareVars";
+import {PrepareCallFunctions} from "./Parsers/PrepareCallFunctions";
 
 
 export class IcX {
@@ -37,6 +38,9 @@ export class IcX {
         // @ts-ignore
         try {
             switch (value['type']) {
+                case "CallStatement":
+                    new PrepareCallFunctions(this, value,index,array)
+                    break;
                 case "AssignmentStatement":
                 case "LocalStatement":
                     new PrepareVars(this, value,index,array)

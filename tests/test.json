@@ -2,6 +2,77 @@
   "type": "Chunk",
   "body": [
     {
+      "type": "CallStatement",
+      "expression": {
+        "type": "CallExpression",
+        "base": {
+          "type": "Identifier",
+          "name": "useConstants",
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          }
+        },
+        "arguments": [],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 14
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": "FunctionDeclaration",
+      "identifier": {
+        "type": "Identifier",
+        "name": "test",
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 9
+          },
+          "end": {
+            "line": 3,
+            "column": 13
+          }
+        }
+      },
+      "isLocal": false,
+      "parameters": [],
+      "body": [],
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
       "type": "LocalStatement",
       "variables": [
         {
@@ -9,11 +80,11 @@
           "name": "s",
           "loc": {
             "start": {
-              "line": 1,
+              "line": 7,
               "column": 6
             },
             "end": {
-              "line": 1,
+              "line": 7,
               "column": 7
             }
           }
@@ -26,11 +97,11 @@
           "raw": "5",
           "loc": {
             "start": {
-              "line": 1,
+              "line": 7,
               "column": 10
             },
             "end": {
-              "line": 1,
+              "line": 7,
               "column": 11
             }
           }
@@ -38,11 +109,11 @@
       ],
       "loc": {
         "start": {
-          "line": 1,
+          "line": 7,
           "column": 0
         },
         "end": {
-          "line": 1,
+          "line": 7,
           "column": 11
         }
       }
@@ -55,11 +126,11 @@
           "name": "a",
           "loc": {
             "start": {
-              "line": 2,
+              "line": 8,
               "column": 0
             },
             "end": {
-              "line": 2,
+              "line": 8,
               "column": 1
             }
           }
@@ -72,11 +143,11 @@
           "raw": "10",
           "loc": {
             "start": {
-              "line": 2,
+              "line": 8,
               "column": 4
             },
             "end": {
-              "line": 2,
+              "line": 8,
               "column": 6
             }
           }
@@ -84,11 +155,11 @@
       ],
       "loc": {
         "start": {
-          "line": 2,
+          "line": 8,
           "column": 0
         },
         "end": {
-          "line": 2,
+          "line": 8,
           "column": 6
         }
       }
@@ -100,7 +171,7 @@
       "column": 0
     },
     "end": {
-      "line": 2,
+      "line": 8,
       "column": 6
     }
   },
