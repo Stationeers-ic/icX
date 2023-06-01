@@ -1,11 +1,10 @@
-import {Directive, Expression, ExpressionMap, ModuleDeclaration, Statement} from "estree";
 import {IcX} from "../index";
 import {uses} from "../types";
 
 export abstract class Prepare {
     protected Element: any
 
-    constructor(protected scope: IcX, Element: (Directive | Statement | ModuleDeclaration | ExpressionMap | Expression), protected index: number, protected array?: (Directive | Statement | ModuleDeclaration)[]) {
+    constructor(protected scope: IcX, Element: any, protected index: number, protected array?: any[]) {
         this.Element = Element
         this.run()
     }

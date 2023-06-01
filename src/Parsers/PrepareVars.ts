@@ -1,19 +1,17 @@
 import {Prepare} from "./Prepare";
-import {Identifier, VariableDeclaration} from "estree";
-import {PrepareInit} from "./PrepareInit";
 import {Variable} from "../Storages/Variable";
 
 export class PrepareVars extends Prepare {
-    declare protected Element: VariableDeclaration;
+    declare protected Element:any;
 
     run(): void {
         const isConst = this.Element.kind === 'const'
-        this.Element.declarations.forEach((item, index) => {
-            const id = item.id as Identifier;
+        this.Element.declarations.forEach((item:any, index:any) => {
+            const id = item.id
             let value: any = undefined
             if (item.init) {
-                const __val = new PrepareInit(this.scope, item.init, index)
-                value = __val.get()
+                // const __val = new PrepareInit(this.scope, item.init, index)
+                // value = __val.get()
             }
             const variable = this.scope.vars.set(id.name, value)
             variable.constant = isConst

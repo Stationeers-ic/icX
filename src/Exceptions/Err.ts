@@ -1,5 +1,4 @@
 import ErrorCodes from "./errorCodes"
-import {SourceLocation} from "estree";
 
 export class Err {
 
@@ -17,7 +16,7 @@ export class Err {
     public lvl: string = ''
     public group: string = ''
 
-    constructor(code: number, public loc: SourceLocation | null | undefined, ...params: string[]) {
+    constructor(code: number, public loc: any | null | undefined, ...params: string[]) {
         this.code = code
         if (this.code in ErrorCodes) {
             this.message = ErrorCodes[this.code]
