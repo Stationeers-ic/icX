@@ -1,22 +1,47 @@
 import {Prepare} from "./Prepare";
 import {Variable} from "../Storages/Variable";
+import * as lua from "luaparse";
 
 export class PrepareVars extends Prepare {
-    declare protected Element:any;
+    declare protected Element: lua.AssignmentStatement | lua.LocalStatement;
 
     run(): void {
-        const isConst = this.Element.kind === 'const'
-        this.Element.declarations.forEach((item:any, index:any) => {
-            const id = item.id
-            let value: any = undefined
-            if (item.init) {
-                // const __val = new PrepareInit(this.scope, item.init, index)
-                // value = __val.get()
-            }
-            const variable = this.scope.vars.set(id.name, value)
-            variable.constant = isConst
-            this.compile(variable, value)
+        const isConst = this.Element.type !== 'LocalStatement'
+        let value: any = undefined
+        switch (this.Element.init[0].type) {
+            case "NumericLiteral":
+                value = this.Element.init[0].value
+                break;
+            case "FunctionDeclaration":
+            case "Identifier":
+            case "StringLiteral":
+            case "BooleanLiteral":
+            case "NilLiteral":
+            case "VarargLiteral":
+            case "TableConstructorExpression":
+            case "BinaryExpression":
+            case "LogicalExpression":
+            case "UnaryExpression":
+            case "MemberExpression":
+            case "IndexExpression":
+            case "CallExpression":
+            case "TableCallExpression":
+            case "StringCallExpression":
+            default:
+                value = undefined
 
+        }
+        this.Element.variables.forEach((item, index) => {
+            switch (item['type']) {
+                case "Identifier":
+                    const variable = this.scope.vars.set(item.name, value)
+                    variable.constant = isConst
+                    this.compile(variable, value)
+                    break
+                case "IndexExpression":
+                case "MemberExpression":
+                default:
+            }
         })
     }
 

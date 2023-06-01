@@ -2,7 +2,7 @@
   "type": "Chunk",
   "body": [
     {
-      "type": "AssignmentStatement",
+      "type": "LocalStatement",
       "variables": [
         {
           "type": "Identifier",
@@ -10,11 +10,11 @@
           "loc": {
             "start": {
               "line": 1,
-              "column": 0
+              "column": 6
             },
             "end": {
               "line": 1,
-              "column": 1
+              "column": 7
             }
           }
         }
@@ -27,11 +27,11 @@
           "loc": {
             "start": {
               "line": 1,
-              "column": 4
+              "column": 10
             },
             "end": {
               "line": 1,
-              "column": 5
+              "column": 11
             }
           }
         }
@@ -43,137 +43,53 @@
         },
         "end": {
           "line": 1,
-          "column": 5
+          "column": 11
         }
       }
     },
     {
-      "type": "IfStatement",
-      "clauses": [
+      "type": "AssignmentStatement",
+      "variables": [
         {
-          "type": "IfClause",
-          "condition": {
-            "type": "BinaryExpression",
-            "operator": "==",
-            "left": {
-              "type": "Identifier",
-              "name": "s",
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 3
-                },
-                "end": {
-                  "line": 3,
-                  "column": 4
-                }
-              }
-            },
-            "right": {
-              "type": "NumericLiteral",
-              "value": 5,
-              "raw": "5",
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 8
-                },
-                "end": {
-                  "line": 3,
-                  "column": 9
-                }
-              }
-            },
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 3
-              },
-              "end": {
-                "line": 3,
-                "column": 9
-              }
-            }
-          },
-          "body": [
-            {
-              "type": "CallStatement",
-              "expression": {
-                "type": "CallExpression",
-                "base": {
-                  "type": "Identifier",
-                  "name": "print",
-                  "loc": {
-                    "start": {
-                      "line": 4,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 4,
-                      "column": 9
-                    }
-                  }
-                },
-                "arguments": [
-                  {
-                    "type": "NumericLiteral",
-                    "value": 10,
-                    "raw": "10",
-                    "loc": {
-                      "start": {
-                        "line": 4,
-                        "column": 10
-                      },
-                      "end": {
-                        "line": 4,
-                        "column": 12
-                      }
-                    }
-                  }
-                ],
-                "loc": {
-                  "start": {
-                    "line": 4,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 13
-                  }
-                }
-              },
-              "loc": {
-                "start": {
-                  "line": 4,
-                  "column": 4
-                },
-                "end": {
-                  "line": 4,
-                  "column": 13
-                }
-              }
-            }
-          ],
+          "type": "Identifier",
+          "name": "a",
           "loc": {
             "start": {
-              "line": 3,
+              "line": 2,
               "column": 0
             },
             "end": {
-              "line": 4,
-              "column": 13
+              "line": 2,
+              "column": 1
+            }
+          }
+        }
+      ],
+      "init": [
+        {
+          "type": "NumericLiteral",
+          "value": 10,
+          "raw": "10",
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 4
+            },
+            "end": {
+              "line": 2,
+              "column": 6
             }
           }
         }
       ],
       "loc": {
         "start": {
-          "line": 3,
+          "line": 2,
           "column": 0
         },
         "end": {
-          "line": 5,
-          "column": 3
+          "line": 2,
+          "column": 6
         }
       }
     }
@@ -184,8 +100,8 @@
       "column": 0
     },
     "end": {
-      "line": 5,
-      "column": 3
+      "line": 2,
+      "column": 6
     }
   },
   "comments": []
