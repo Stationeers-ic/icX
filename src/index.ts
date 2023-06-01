@@ -1,10 +1,12 @@
-import {Vars} from "./Storages/Vars";
+import {Vars} from "./Language/Vars";
 import {Err, Errors} from "./Exceptions/Err";
 import {uses} from "./types";
 import * as lua from "luaparse"
 import {Chunk} from "luaparse/lib/ast";
 import {PrepareVars} from "./Parsers/PrepareVars";
 import {PrepareCallFunctions} from "./Parsers/PrepareCallFunctions";
+import {PrepareGoto} from "./Parsers/PrepareGoto";
+import {PrepareLabel} from "./Parsers/PrepareLabel";
 
 
 export class IcX {
@@ -15,7 +17,7 @@ export class IcX {
     public program: Chunk;
 
     constructor(code: string) {
-        this.program = lua.parse(code, {locations: true})
+        this.program = lua.parse(code, {locations: true,luaVersion:"5.3",comments:true})
     }
 
     run() {
@@ -44,6 +46,12 @@ export class IcX {
                 case "AssignmentStatement":
                 case "LocalStatement":
                     new PrepareVars(this, value,index,array)
+                    break;
+                case "GotoStatement":
+                    new PrepareGoto(this, value,index,array)
+                    break;
+                case "LabelStatement":
+                    new PrepareLabel(this, value,index,array)
                     break;
                 default:
                     throw new Err(902, value.loc, value['type'] + ', not supported');

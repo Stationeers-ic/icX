@@ -1,5 +1,5 @@
 import {Prepare} from "./Prepare";
-import {Variable} from "../Storages/Variable";
+import {Variable} from "../Language/Variable";
 import * as lua from "luaparse";
 
 export class PrepareVars extends Prepare {

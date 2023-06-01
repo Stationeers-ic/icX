@@ -1,8 +1,6 @@
-useConstants()
+--useConstants()
+--useAliases()
+::loop::
+d1:get('test')
 
-function test()
-
-end
-
-local s = 5
-a = 10
+goto loop
