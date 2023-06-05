@@ -87,3 +87,6 @@ package-lock.json
 pnpm-lock.yaml
 .project-manager/
 !/jest.config.js
+
+!test/test.ic10
+!test/test.icX.js
