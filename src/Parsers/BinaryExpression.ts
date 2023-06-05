@@ -48,7 +48,9 @@ export function getBinaryExpressionValue(expression: BinaryExpression | LogicalE
         const result = new Function(`return ${left} ${expression.operator} ${right}`)();
         return toNumber(result);
     }
+    const combined = [left, expression.operator, right];
+    // try to optimize
+    console.log(JSON.stringify(combined));
 
-    //
-    return 0;
+    return combined;
 }

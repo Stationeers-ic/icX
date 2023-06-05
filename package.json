@@ -41,7 +41,8 @@
     "@scicave/math-parser": "^5.1.0",
     "@types/esprima": "^4.0.3",
     "@types/estree": "^1.0.1",
-    "esprima": "^4.0.1"
+    "esprima": "^4.0.1",
+    "mathjs": "^11.8.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.3.1",

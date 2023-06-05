@@ -3,7 +3,7 @@
 import Throw from "../Exceptions/Err";
 import { VariableKind } from "./VariableStorage"
 // ActionType = "CreateVariable" | "CreateFunction" | "CallFunction" | "AssignVariable" | "ReturnValue"
-export type NumericValue = number | string | (number | string)[];
+export type NumericValue = number | string | NumericValue[];
 
 export type CreateVariableType = {
     type: "CreateVariable";
