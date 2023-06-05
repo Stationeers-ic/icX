@@ -4,6 +4,8 @@ export const ErrorCodes: Readonly<{ [errorCode: number]: string }> = {
     103: '"{0}" is not already declared at position "{1}"',
     104: '"{0}" is not a valid number',
     105: '',
+    106: 'Operator "{0}" is not supported',
+    107: 'Strings are not supported',
     901: 'Internal error',
     902: 'Variable "{0}" is not found',
     // 202: 'Invalid constant value',

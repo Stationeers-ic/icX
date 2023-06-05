@@ -1,4 +1,5 @@
-var a
+const a = 20
+
 
 
 

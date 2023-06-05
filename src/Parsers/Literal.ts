@@ -8,6 +8,10 @@ export function getNumericValue(
 ): number {
     if (typeof value === "number") return value;
     if (typeof value === "boolean") return value ? 1 : 0;
+    if (typeof value === "string") {
+        Throw(107, loc);
+        return 0;
+    }
     Throw(104, loc, value?.toString());
     if (value === null) return 0;
     if (value === undefined) return 0;

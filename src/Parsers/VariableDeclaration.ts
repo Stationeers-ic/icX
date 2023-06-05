@@ -2,9 +2,7 @@ import { Program, VariableDeclaration, VariableDeclarator } from "estree";
 import Throw from "../Exceptions/Err";
 import VariableStorage, { VariableKind, Variable } from "../Storages/VariableStorage";
 import { ActionType, CreateVariableType, ExecutionStorage, NumericValue } from "../Storages/ExecutionStorage";
-import { getLiteralValue } from "./Literal";
-import { getIdentifierValue } from "./Identifier";
-import { getBinaryExpressionValue } from "./BinaryExpression"
+import { getExpression } from "./Expression"
 
 const executionStorage = ExecutionStorage.getInstance();
 
@@ -29,15 +27,8 @@ export function PVariableDeclarator(
         kind: kind,
     };
     if (!element.init) {
-    } else if (element.init.type === "Identifier") {
-        value.value = getIdentifierValue(element.init);
-    } else if (element.init.type === "Literal") {
-        value.value = getLiteralValue(element.init);
-    } else if (element.init.type === "BinaryExpression") {
-        value.value = getBinaryExpressionValue(element.init);
     } else {
-        Throw(102, element.init.loc, element.init.type, "VariableDeclarator");
-        return;
+        value.value = getExpression(element.init);
     }
     executionStorage.addLine(value);
     if (kind === "let") {
@@ -56,3 +47,5 @@ export function PVariableDeclaration(element: VariableDeclaration, root: Program
         PVariableDeclarator(d, element.kind, root, isRoot);
     });
 }
+
+

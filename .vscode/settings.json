@@ -8,7 +8,7 @@
     "**/Thumbs.db": true,
     "**/*.js": {"when": "$(basename).ts"},
     "**/*.d.ts": {"when": "$(basename).ts"},
-    "**/*.js.map": true,
+    "**/*.js.map": { "when": "$(basename)" },
     "**/node_modules": true,
     ".idea": true,
     ".github": true,
