@@ -2,78 +2,6 @@
   "type": "Program",
   "body": [
     {
-      "type": "ExpressionStatement",
-      "expression": {
-        "type": "CallExpression",
-        "callee": {
-          "type": "Identifier",
-          "name": "use",
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 1,
-              "column": 3
-            }
-          }
-        },
-        "arguments": [
-          {
-            "type": "Literal",
-            "value": "aliases",
-            "raw": "'aliases'",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
-              },
-              "end": {
-                "line": 1,
-                "column": 13
-              }
-            }
-          },
-          {
-            "type": "Literal",
-            "value": "contants",
-            "raw": "'contants'",
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 14
-              },
-              "end": {
-                "line": 1,
-                "column": 24
-              }
-            }
-          }
-        ],
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 25
-          }
-        }
-      },
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 25
-        }
-      }
-    },
-    {
       "type": "VariableDeclaration",
       "declarations": [
         {
@@ -83,38 +11,24 @@
             "name": "a",
             "loc": {
               "start": {
-                "line": 3,
+                "line": 1,
                 "column": 4
               },
               "end": {
-                "line": 3,
+                "line": 1,
                 "column": 5
               }
             }
           },
-          "init": {
-            "type": "Literal",
-            "value": 10,
-            "raw": "10",
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 7
-              },
-              "end": {
-                "line": 3,
-                "column": 9
-              }
-            }
-          },
+          "init": null,
           "loc": {
             "start": {
-              "line": 3,
+              "line": 1,
               "column": 4
             },
             "end": {
-              "line": 3,
-              "column": 9
+              "line": 1,
+              "column": 5
             }
           }
         }
@@ -122,70 +36,12 @@
       "kind": "var",
       "loc": {
         "start": {
-          "line": 3,
+          "line": 1,
           "column": 0
         },
         "end": {
-          "line": 3,
-          "column": 9
-        }
-      }
-    },
-    {
-      "type": "VariableDeclaration",
-      "declarations": [
-        {
-          "type": "VariableDeclarator",
-          "id": {
-            "type": "Identifier",
-            "name": "b",
-            "loc": {
-              "start": {
-                "line": 4,
-                "column": 6
-              },
-              "end": {
-                "line": 4,
-                "column": 7
-              }
-            }
-          },
-          "init": {
-            "type": "Literal",
-            "value": 8,
-            "raw": "8",
-            "loc": {
-              "start": {
-                "line": 4,
-                "column": 10
-              },
-              "end": {
-                "line": 4,
-                "column": 11
-              }
-            }
-          },
-          "loc": {
-            "start": {
-              "line": 4,
-              "column": 6
-            },
-            "end": {
-              "line": 4,
-              "column": 11
-            }
-          }
-        }
-      ],
-      "kind": "const",
-      "loc": {
-        "start": {
-          "line": 4,
-          "column": 0
-        },
-        "end": {
-          "line": 4,
-          "column": 11
+          "line": 1,
+          "column": 5
         }
       }
     }
@@ -197,9 +53,10 @@
       "column": 0
     },
     "end": {
-      "line": 4,
-      "column": 11
+      "line": 1,
+      "column": 5
     }
   },
-  "comments": []
+  "comments": [],
+  "errors": []
 }

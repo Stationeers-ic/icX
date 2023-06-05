@@ -88,5 +88,5 @@ pnpm-lock.yaml
 .project-manager/
 !/jest.config.js
 
-!test/test.ic10
-!test/test.icX.js
+!*.ic10
+!*.icX.js
