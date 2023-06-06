@@ -44,13 +44,11 @@ export function getBinaryExpressionValue(expression: BinaryExpression | LogicalE
             Throw(106, expression.loc, expression.operator);
             return 0;
         }
-        console.log(`return ${left} ${expression.operator} ${right}`);
         const result = new Function(`return ${left} ${expression.operator} ${right}`)();
         return toNumber(result);
     }
     const combined = [left, expression.operator, right];
     // try to optimize
-    console.log(JSON.stringify(combined));
 
     return combined;
 }

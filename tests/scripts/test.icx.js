@@ -1,1 +1,2 @@
-var b = sqrt(2,2);
+
+var radius = sqrt(2*2 + 2*2);

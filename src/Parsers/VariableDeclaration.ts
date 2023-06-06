@@ -4,8 +4,6 @@ import VariableStorage, { VariableKind, Variable } from "../Storages/VariableSto
 import { ActionType, CreateVariableType, ExecutionStorage, NumericValue } from "../Storages/ExecutionStorage";
 import { getExpression } from "./Expression";
 
-const executionStorage = ExecutionStorage.getInstance();
-
 export function PVariableDeclarator(
     element: VariableDeclarator,
     kind: VariableKind,
@@ -32,20 +30,20 @@ export function PVariableDeclarator(
     } else {
         value.value = getExpression(element.init);
     }
-    executionStorage.addLine(value);
+    ExecutionStorage.addLine(value);
     if (kind === "let") {
         VariableStorage.setVar(element.id.name, kind, value.value, element.loc);
     } else if (typeof value.value === "number") {
         VariableStorage.setConst(element.id.name, kind, value.value, element.loc);
     } else {
-        Throw(105, element.loc, element.id.name);
+        if (kind === "var") Throw(109, element.loc, element.id.name);
+        else Throw(105, element.loc, element.id.name);
         return;
     }
 }
 
 export function PVariableDeclaration(element: VariableDeclaration, root: Program, isRoot: boolean = false) {
     element.declarations.forEach((d) => {
-        console.log(element.kind);
         PVariableDeclarator(d, element.kind, root, isRoot);
     });
 }

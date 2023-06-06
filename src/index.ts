@@ -28,7 +28,7 @@ export class IcX {
     compile(): string {
         const compiler = new PProgram(this.program);
         compiler.process();
-        console.log(ExecutionStorage.getInstance().lines);
+        console.dir(ExecutionStorage.lines, { depth: null });
         // this.lines = []
         // this.program.body.forEach((value, index, array) => {
         //     this.prepareItem(value, index, array)

@@ -3,7 +3,8 @@
 import Throw from "../Exceptions/Err";
 import { VariableKind } from "./VariableStorage"
 // ActionType = "CreateVariable" | "CreateFunction" | "CallFunction" | "AssignVariable" | "ReturnValue"
-export type NumericValue = number | string | NumericValue[];
+export type NumericValue = number | string | ActionType | NumericValue[];
+// export type DataValue = NumericValue | ActionType;
 
 export type CreateVariableType = {
     type: "CreateVariable";
@@ -13,13 +14,13 @@ export type CreateVariableType = {
 };
 export type CallFunctionType = {
     type: "CallFunction";
-    name: string;
+    name: NumericValue;
     args: NumericValue[];
 };
 export type ActionType = CreateVariableType | CallFunctionType;
 
 export class ExecutionStorage {
-    lines: ActionType[] = [];
+    static lines: ActionType[] = [];
     private static instance: ExecutionStorage;
     private constructor() {}
     static getInstance(): ExecutionStorage {
@@ -29,7 +30,7 @@ export class ExecutionStorage {
         return ExecutionStorage.instance;
     }
 
-    addLine(action: ActionType) {
+    static addLine(action: ActionType) {
         this.lines.push(action);
     }
 }
