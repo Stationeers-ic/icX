@@ -2,7 +2,7 @@ import { Program, VariableDeclaration, VariableDeclarator } from "estree";
 import Throw from "../Exceptions/Err";
 import VariableStorage, { VariableKind, Variable } from "../Storages/VariableStorage";
 import { ActionType, CreateVariableType, ExecutionStorage, NumericValue } from "../Storages/ExecutionStorage";
-import { getExpression } from "./Expression"
+import { getExpression } from "./Expression";
 
 const executionStorage = ExecutionStorage.getInstance();
 
@@ -17,7 +17,9 @@ export function PVariableDeclarator(
         return;
     }
     if (VariableStorage.exist(element.id.name)) {
-        Throw(103, VariableStorage.whereDeclaration(element.id.name), element.id.type, "VariableDeclarator");
+        const location = VariableStorage.whereDeclaration(element.id.name);
+        if (location === "Internal") Throw(108, element.loc, element.id.name);
+        else Throw(103, location, element.id.type, "VariableDeclarator");
         return;
     }
     const value: CreateVariableType = {
@@ -47,5 +49,3 @@ export function PVariableDeclaration(element: VariableDeclaration, root: Program
         PVariableDeclarator(d, element.kind, root, isRoot);
     });
 }
-
-

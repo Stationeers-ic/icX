@@ -17,6 +17,12 @@ export type Var = {
     value: NumericValue;
     loc?: Location;
 };
+export type Internal = {
+    type: "Internal";
+    value: NumericValue;
+    loc?: Location;
+};
+
 export type Variable = Const | Var;
 
 // let обычная переменная
@@ -24,7 +30,7 @@ export type Variable = Const | Var;
 // const невидимая константа
 
 export class VariableStorage {
-    static variables: Map<string, Variable> = new Map<string, Variable>();
+    static variables: Map<string, Variable | Internal> = new Map();
 
     static setVar(key: string, kind: "let", value: NumericValue, loc: Location): Variable | null {
         if (this.variables.has(key)) {
@@ -54,8 +60,9 @@ export class VariableStorage {
         return this.variables.has(key);
     }
 
-    static whereDeclaration(key: string): Location {
+    static whereDeclaration(key: string): Location | "Internal" {
         if (this.exist(key)) {
+            if (this.variables.get(key)?.type === "Internal") return "Internal";
             Throw(902, undefined, key);
         }
         return this.variables.get(key)?.loc;

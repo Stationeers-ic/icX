@@ -11,7 +11,12 @@ export type CreateVariableType = {
     value: NumericValue;
     kind: VariableKind;
 };
-export type ActionType = CreateVariableType;
+export type CallFunctionType = {
+    type: "CallFunction";
+    name: string;
+    args: NumericValue[];
+};
+export type ActionType = CreateVariableType | CallFunctionType;
 
 export class ExecutionStorage {
     lines: ActionType[] = [];
