@@ -1,8 +1,0 @@
-move r0 5
-l r1 dr0 Temperature
-jal main
-jr 5
-main:
-move r2 4
-l r1 dr2 Temperature
-j ra

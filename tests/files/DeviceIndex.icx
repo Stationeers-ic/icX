@@ -1,9 +1,0 @@
-var idx = 5
-var tmp = d[idx].Temperature
-
-function main()
-	var idx2 = 4
-	tmp = d[idx2].Temperature
-end
-
-main()
