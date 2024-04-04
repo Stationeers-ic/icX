@@ -4,7 +4,10 @@
   "type": "module",
   "description": "Compiler icX to ic10 ",
   "main": "",
-  "scripts": {},
+  "scripts": {
+    "test": "bun test",
+    "build": "npm test && tsc --project tsconfig.json && tsc --project tsconfig.cjs.json"
+  },
   "engines": {
     "bun": ">=1.0.20",
     "node": ">=20.10.0"
