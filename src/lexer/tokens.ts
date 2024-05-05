@@ -405,6 +405,11 @@ export const TOKENS: Array<
 	{
 		token: TOKEN_TYPES.LET,
 		patternType: "string",
+		pattern: "var",
+	},
+	{
+		token: TOKEN_TYPES.LET,
+		patternType: "string",
 		pattern: "let",
 	},
 	{
