@@ -168,6 +168,24 @@ export const TOKENS: Array<
 		pattern: "=>",
 	},
 	{
+		token: TOKEN_TYPES.COMMENT,
+		patternType: "range",
+		open: "/*",
+		close: "*/",
+	},
+	{
+		token: TOKEN_TYPES.COMMENT,
+		patternType: "function",
+		pattern: (position, total) => {
+			const reg = /^\/\/[^\n]*/
+			const match = reg.exec(total.slice(position))
+			// if start position is 0 return 0
+			// else return length of match
+			if (match === null) return null
+			return [match[0].length, match[0].slice(2)]
+		},
+	},
+	{
 		token: TOKEN_TYPES.ASSIGNMENT,
 		patternType: "string",
 		pattern: "=",
@@ -459,12 +477,6 @@ export const TOKENS: Array<
 		errorOn: ["\n"],
 	},
 	{
-		token: TOKEN_TYPES.COMMENT,
-		patternType: "range",
-		open: "/*",
-		close: "*/",
-	},
-	{
 		token: TOKEN_TYPES.NUMBER,
 		patternType: "function",
 		// pattern: /-?\d+(?:\.\d+)?/,
@@ -489,18 +501,6 @@ export const TOKENS: Array<
 			// else return length of match
 			if (match === null) return null
 			return [match[0].length, match[0]]
-		},
-	},
-	{
-		token: TOKEN_TYPES.COMMENT,
-		patternType: "function",
-		pattern: (position, total) => {
-			const reg = /^\/\/[^\n]*/
-			const match = reg.exec(total.slice(position))
-			// if start position is 0 return 0
-			// else return length of match
-			if (match === null) return null
-			return [match[0].length, match[0].slice(2)]
 		},
 	},
 ]
