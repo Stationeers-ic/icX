@@ -1,8 +1,7 @@
 import extractTextBetween from "./textBetween"
 import { TOKENS, TOKEN_TYPES } from "./tokens"
 
-const text = `const shuffle = "hello" // h */
-`
+const text = `x = "hello "" world`
 
 type Token = {
 	type: TOKEN_TYPES
@@ -21,9 +20,7 @@ function getNextToken(
 		if (token.patternType === "string") {
 			if (token.pattern.length === 1 && text[index] === token.pattern) {
 				return [1, { type: token.token }]
-			}
-
-			if (text.startsWith(token.pattern, index)) {
+			} else if (text.startsWith(token.pattern, index)) {
 				if (/^[^\w]/.exec(text.slice(index + token.pattern.length)))
 					return [token.pattern.length, { type: token.token }]
 			}
