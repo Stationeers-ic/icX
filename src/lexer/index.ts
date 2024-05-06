@@ -2,8 +2,8 @@ import extractTextBetween from "./textBetween"
 import { TOKENS, TOKEN_TYPES } from "./tokens"
 
 const text = `x = "hello "" world`
-
-type Token = {
+export {TOKEN_TYPES}
+export type Token = {
 	type: TOKEN_TYPES
 	start: number
 	end: number
@@ -57,7 +57,7 @@ function getNextToken(
 	}
 }
 // console.log(extractTextBetween(1, "1'word\\'end'd", "'", "'", ["\\'"], ["\n"]))
-function parse(text: string) {
+export function parse(text: string) {
 	let index = 0
 	const tokens: Token[] = []
 	const errors: Token[] = []
@@ -90,4 +90,3 @@ function parse(text: string) {
 	return [tokens, errors]
 }
 
-console.log(parse(text))
