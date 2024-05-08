@@ -50,6 +50,7 @@ export const TOKEN_TYPES = {
 	NumberToken: "NumberToken",
 	FunctionCall: "FunctionCall",
 	Addition: "Addition",
+	Multiplication: "Multiplication",
 	LogicalNot: "LogicalNot",
 } as const
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]

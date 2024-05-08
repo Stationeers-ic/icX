@@ -1,7 +1,7 @@
 import extractTextBetween from "./textBetween"
 import { TOKENS, TOKEN_TYPES } from "./tokens"
 
-const text = `x = "hello "" world`
+const text = `x ="hello"`
 export { TOKEN_TYPES }
 export type Token<T = TOKEN_TYPES, V = any> = {
 	type: T

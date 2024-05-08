@@ -4,6 +4,7 @@ import { LexerToken, LexerTOKEN_TYPES, lexerCalculationTokens, TokenInterface } 
 import Addition from "./tokens/Addition"
 import FunctionCall from "./tokens/FunctionCall"
 import LogicalNot from "./tokens/LogicalNot"
+import Multiplication from "./tokens/Multiplication"
 
 export type mathTree =
 	| { left?: mathTree; right: mathTree; operator: LexerTOKEN_TYPES; token: LexerToken }
@@ -184,6 +185,8 @@ export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface)
 	switch (tree.operator) {
 		case LexerTOKEN_TYPES.ADDITION:
 			return new Addition(tree.left, tree.right, parent)
+		case LexerTOKEN_TYPES.MULTIPLICATION:
+			return new Multiplication(tree.left, tree.right, parent)
 	}
 
 	return null
@@ -310,7 +313,8 @@ export function evaluateMath(
 				parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
 				return [null, other]
 			}
-			if (CalculationOperators[type].associativity === null) variables.push({ right, operator: type })
+			if (CalculationOperators[type].associativity === null)
+				variables.push({ right, operator: type, token: value })
 			else {
 				const left = variables.pop()
 				if (left === undefined) {
