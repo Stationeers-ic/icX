@@ -2,7 +2,7 @@ import { parse } from "../lexer"
 import Program from "./tokens/Program"
 
 
-const code = `5+5`
+const code = `!5+5`
 console.log(parse(code))
 console.log("____________")
 const p = Program.parseProgram(parse(code)[0])

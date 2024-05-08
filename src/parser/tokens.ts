@@ -1,5 +1,6 @@
 import { type Token as _LexerToken, TOKEN_TYPES as _LexerTOKEN_TYPES  } from "../lexer"
 import { ErrorListing } from "./errors"
+import { mathTree } from "./evaluateMath"
 
 export type ExtendedLexerToken =
 	| _LexerToken<"FUNCTION_CALL", LexerToken[]>
@@ -34,7 +35,7 @@ export interface TokenInterface {
 }
 export abstract class Token {
 	static parse(tokens: LexerToken[], parent: TokenInterface): [TokenInterface, LexerToken[]] | null {
-		throw new Error("Method not implemented! Use derived class")
+		throw new Error("Method not used in this class")
 	}
 }
 
@@ -48,6 +49,8 @@ export const TOKEN_TYPES = {
 	StringToken: "StringToken",
 	NumberToken: "NumberToken",
 	FunctionCall: "FunctionCall",
+	Addition: "Addition",
+	LogicalNot: "LogicalNot",
 } as const
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
 export default TOKEN_TYPES

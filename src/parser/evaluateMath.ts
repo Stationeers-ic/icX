@@ -1,9 +1,11 @@
 import { createError, createMissingError, createTokenError, ERROR } from "./errors"
 import { getNextToken } from "./getNextToken"
 import { LexerToken, LexerTOKEN_TYPES, lexerCalculationTokens, TokenInterface } from "./tokens"
+import Addition from "./tokens/Addition"
 import FunctionCall from "./tokens/FunctionCall"
+import LogicalNot from "./tokens/LogicalNot"
 
-export type mathTree = { left?: mathTree; right: mathTree; operator: LexerTOKEN_TYPES } | { value: LexerToken }
+export type mathTree = { left?: mathTree; right: mathTree; operator: LexerTOKEN_TYPES, token: LexerToken } | { value: LexerToken}
 
 const temp = {
 	LEFT_PARENTHESIS: {
@@ -171,7 +173,16 @@ export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface)
 		}
 		return token
 	}
+	if (tree.left === undefined) {
+		switch (tree.operator) {
+			case LexerTOKEN_TYPES.LOGICAL_NOT:
+				return new LogicalNot(tree.right, parent, tree.token)
+		}
+		return null
+	}
 	switch (tree.operator) {
+		case LexerTOKEN_TYPES.ADDITION:
+			return new Addition(tree.left, tree.right, parent)
 	}
 
 	return null
@@ -307,7 +318,7 @@ export function evaluateMath(
 					parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
 					return [null, other]
 				}
-				variables.push({ left, right, operator: type })
+				variables.push({ left, right, operator: type , token:value})
 			}
 		} else {
 			variables.push({ value })
@@ -318,6 +329,8 @@ export function evaluateMath(
 		parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
 		return [null, other]
 	}
+	if (variables[0]!== undefined)
+		return [getNextTokenFromMathTree(variables[0], parent), other]
 	return [null, other]
 
 }
