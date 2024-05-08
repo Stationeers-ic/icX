@@ -1,4 +1,4 @@
-import { type Token as _LexerToken, TOKEN_TYPES as _LexerTOKEN_TYPES  } from "../lexer"
+import { type Token as _LexerToken, TOKEN_TYPES as _LexerTOKEN_TYPES } from "../lexer"
 import { ErrorListing } from "./errors"
 import { mathTree } from "./evaluateMath"
 
@@ -55,7 +55,6 @@ export const TOKEN_TYPES = {
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
 export default TOKEN_TYPES
 
-
 export const lexerBrakeTokens = {
 	NEWLINE: LexerTOKEN_TYPES.NEWLINE,
 	SEMICOLON: LexerTOKEN_TYPES.SEMICOLON,
@@ -95,7 +94,6 @@ export const lexerCalculationTokens = {
 	FALSE: LexerTOKEN_TYPES.FALSE,
 	NUMBER: LexerTOKEN_TYPES.NUMBER,
 	IDENTIFIER: LexerTOKEN_TYPES.IDENTIFIER,
-	COMMA: LexerTOKEN_TYPES.COMMA
+	COMMA: LexerTOKEN_TYPES.COMMA,
 } as const
 export type lexerCalculationTokens = (typeof lexerCalculationTokens)[keyof typeof lexerCalculationTokens]
-

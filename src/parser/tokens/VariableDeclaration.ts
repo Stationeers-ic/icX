@@ -26,7 +26,6 @@ export class VariableDeclaration extends Token implements TokenInterface {
 			const x = result[0]
 			if (VariableDeclarator.is(x)) {
 				this.declarations.push(x)
-
 			} else if (x !== null) {
 				this.errors.push({
 					error: ERROR.UnexpectedToken,
@@ -53,7 +52,5 @@ export class VariableDeclaration extends Token implements TokenInterface {
 		return [newToken, other]
 	}
 }
-
-
 
 export default VariableDeclaration

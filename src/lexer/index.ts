@@ -2,7 +2,7 @@ import extractTextBetween from "./textBetween"
 import { TOKENS, TOKEN_TYPES } from "./tokens"
 
 const text = `x = "hello "" world`
-export {TOKEN_TYPES}
+export { TOKEN_TYPES }
 export type Token<T = TOKEN_TYPES, V = any> = {
 	type: T
 	start: number
@@ -34,7 +34,7 @@ function getNextToken(
 						type: token.token,
 						value: text.slice(index + token.open.length, index + len),
 					},
-					[{ type: TOKEN_TYPES.ERROR, start: index + len, end: index + len, length: 0, value: error}],
+					[{ type: TOKEN_TYPES.ERROR, start: index + len, end: index + len, length: 0, value: error }],
 				]
 			}
 			if (error === false) {
@@ -42,10 +42,7 @@ function getNextToken(
 					len,
 					{
 						type: token.token,
-						value: text.slice(
-							index + token.open.length,
-							index + len - token.close.length,
-						),
+						value: text.slice(index + token.open.length, index + len - token.close.length),
 					},
 				]
 			}
@@ -89,10 +86,7 @@ export function parse(text: string) {
 			break
 		}
 		const err = nextToken[2]
-		if (err)
-			errors.push(...err)
-
+		if (err) errors.push(...err)
 	}
 	return [tokens, errors]
 }
-

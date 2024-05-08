@@ -1,4 +1,11 @@
-import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, lexerBrakeTokens, lexerSeparatorTokens, Token, TokenInterface } from "../tokens"
+import TOKEN_TYPES, {
+	LexerToken,
+	LexerTOKEN_TYPES,
+	lexerBrakeTokens,
+	lexerSeparatorTokens,
+	Token,
+	TokenInterface,
+} from "../tokens"
 import { createTokenError, ERROR, ErrorListing } from "../errors"
 import { getNextToken } from "../getNextToken"
 import Identifier from "./Identifier"
@@ -58,7 +65,7 @@ export class VariableAssignment extends Token implements TokenInterface {
 			tokens.length,
 		)
 		const included = tokens.slice(0, index)
-		const other = tokens.slice(index+1)
+		const other = tokens.slice(index + 1)
 
 		const newToken = new VariableAssignment(included[0], included.slice(2), parent)
 		return [newToken, other]

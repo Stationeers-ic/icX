@@ -1,4 +1,11 @@
-import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, isLexerToken, lexerCalculationTokens, Token, TokenInterface } from "./tokens"
+import TOKEN_TYPES, {
+	LexerToken,
+	LexerTOKEN_TYPES,
+	isLexerToken,
+	lexerCalculationTokens,
+	Token,
+	TokenInterface,
+} from "./tokens"
 import { createTokenError, ERROR, ErrorListing } from "./errors"
 import VariableDeclaration from "./tokens/VariableDeclaration"
 import Identifier from "./tokens/Identifier"
@@ -36,6 +43,3 @@ export function getNextToken(
 	}
 	throw new Error("Unreachable")
 }
-
-
-

@@ -1,6 +1,13 @@
-import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, lexerBrakeTokens, lexerSeparatorTokens, Token, TokenInterface } from "../tokens"
+import TOKEN_TYPES, {
+	LexerToken,
+	LexerTOKEN_TYPES,
+	lexerBrakeTokens,
+	lexerSeparatorTokens,
+	Token,
+	TokenInterface,
+} from "../tokens"
 import { createTokenError, ERROR, ErrorListing } from "../errors"
-import { getNextToken } from '../getNextToken';
+import { getNextToken } from "../getNextToken"
 import Identifier from "./Identifier"
 
 export class VariableDeclarator extends Token implements TokenInterface {

@@ -5,7 +5,9 @@ import Addition from "./tokens/Addition"
 import FunctionCall from "./tokens/FunctionCall"
 import LogicalNot from "./tokens/LogicalNot"
 
-export type mathTree = { left?: mathTree; right: mathTree; operator: LexerTOKEN_TYPES, token: LexerToken } | { value: LexerToken}
+export type mathTree =
+	| { left?: mathTree; right: mathTree; operator: LexerTOKEN_TYPES; token: LexerToken }
+	| { value: LexerToken }
 
 const temp = {
 	LEFT_PARENTHESIS: {
@@ -157,7 +159,6 @@ function isCalculationOperator(token?: string | null): token is keyof typeof Cal
 	return token in CalculationOperators
 }
 
-
 export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface): TokenInterface | null {
 	if ("value" in tree) {
 		const r = getNextToken([tree.value], parent)
@@ -188,7 +189,6 @@ export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface)
 	return null
 }
 
-
 export function evaluateMath(
 	tokens: LexerToken[],
 	parent: TokenInterface,
@@ -204,7 +204,6 @@ export function evaluateMath(
 	let last: LexerToken | null = null
 	let token: LexerToken | undefined | null = null
 	while (token !== undefined) {
-
 		last = token
 		token = included.shift()
 		// console.table(operators)
@@ -318,7 +317,7 @@ export function evaluateMath(
 					parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
 					return [null, other]
 				}
-				variables.push({ left, right, operator: type , token:value})
+				variables.push({ left, right, operator: type, token: value })
 			}
 		} else {
 			variables.push({ value })
@@ -329,8 +328,6 @@ export function evaluateMath(
 		parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
 		return [null, other]
 	}
-	if (variables[0]!== undefined)
-		return [getNextTokenFromMathTree(variables[0], parent), other]
+	if (variables[0] !== undefined) return [getNextTokenFromMathTree(variables[0], parent), other]
 	return [null, other]
-
 }
