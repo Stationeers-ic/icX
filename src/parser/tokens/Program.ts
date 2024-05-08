@@ -35,7 +35,7 @@ export class Program extends Token implements TokenInterface {
 	static parseProgram(tokens: LexerToken[]): Program {
 		// find EOF token
 		const index = tokens.findIndex((token) => token.type === LexerTOKEN_TYPES.EOF)
-		if (index === -1) throw ERROR.EOFNotFound
+		if (index === -1) throw ERROR.MissingEOFToken
 		tokens = tokens.slice(0, index + 1)
 		return new Program(tokens)
 	}

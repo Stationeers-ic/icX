@@ -1,7 +1,7 @@
 import { LexerToken, LexerTOKEN_TYPES } from "./tokens"
 const temp = {
-	EOFNotFound: {
-		name: "EOFNotFound",
+	MissingEOFToken: {
+		name: "MissingEOFToken",
 		message: "cannot form Program: EOF not found",
 	},
 	InvalidToken: {

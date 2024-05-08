@@ -1,5 +1,10 @@
 import { createError, createMissingError, createTokenError, ERROR } from "./errors"
+import { getNextToken } from "./getNextToken"
 import { LexerToken, LexerTOKEN_TYPES, lexerCalculationTokens, TokenInterface } from "./tokens"
+import FunctionCall from "./tokens/FunctionCall"
+
+export type mathTree = { left?: mathTree; right: mathTree; operator: LexerTOKEN_TYPES } | { value: LexerToken }
+
 const temp = {
 	LEFT_PARENTHESIS: {
 		type: LexerTOKEN_TYPES.LEFT_PARENTHESIS,
@@ -149,6 +154,30 @@ function isCalculationOperator(token?: string | null): token is keyof typeof Cal
 	if (!token) return false
 	return token in CalculationOperators
 }
+
+
+export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface): TokenInterface | null {
+	if ("value" in tree) {
+		const r = getNextToken([tree.value], parent)
+		if (r === null) {
+			parent.errors.push(createTokenError(ERROR.UnexpectedToken, tree.value))
+			return null
+		}
+		const [token, lexer] = r
+		lexer.forEach((x) => parent.errors.push(createTokenError(ERROR.UnexpectedToken, x)))
+		if (token === null) {
+			parent.errors.push(createTokenError(ERROR.UnexpectedToken, tree.value))
+			return null
+		}
+		return token
+	}
+	switch (tree.operator) {
+	}
+
+	return null
+}
+
+
 export function evaluateMath(
 	tokens: LexerToken[],
 	parent: TokenInterface,
@@ -164,13 +193,37 @@ export function evaluateMath(
 	let last: LexerToken | null = null
 	let token: LexerToken | undefined | null = null
 	while (token !== undefined) {
+
 		last = token
 		token = included.shift()
+		// console.table(operators)
+		// console.table(values)
+		// console.log("-----------")
+		// console.table(token)
 		if (!token) break
-		const type = token.type
+		let type = token.type
 		if (!(type in lexerCalculationTokens)) throw new Error("Invalid token")
 		const topStack = operators[operators.length - 1]
 		if (isCalculationOperator(type)) {
+			const lastType = last?.type
+			if (
+				lastType === undefined ||
+				(isCalculationOperator(lastType) && lastType !== LexerTOKEN_TYPES.RIGHT_PARENTHESIS)
+			) {
+				if (type === LexerTOKEN_TYPES.ADDITION) {
+					token = {
+						...token,
+						type: LexerTOKEN_TYPES.UNARY_ADDITION,
+					}
+					type = LexerTOKEN_TYPES.UNARY_ADDITION
+				} else if (type === LexerTOKEN_TYPES.SUBTRACTION) {
+					token = {
+						...token,
+						type: LexerTOKEN_TYPES.UNARY_NEGATION,
+					}
+					type = LexerTOKEN_TYPES.UNARY_NEGATION
+				}
+			}
 			if (topStack === undefined) {
 				operators.push([token, CalculationOperators[type]])
 				continue
@@ -182,20 +235,6 @@ export function evaluateMath(
 					values.push(last[0])
 				}
 				continue
-			}
-			const lastType = last?.type
-			if (lastType === undefined || (isCalculationOperator(lastType) && lastType !== LexerTOKEN_TYPES.RIGHT_PARENTHESIS)) {
-				if (type === LexerTOKEN_TYPES.ADDITION) {
-					token = {
-						...token,
-						type: LexerTOKEN_TYPES.UNARY_ADDITION,
-					}
-				} else if (type === LexerTOKEN_TYPES.SUBTRACTION) {
-					token = {
-						...token,
-						type: LexerTOKEN_TYPES.UNARY_NEGATION,
-					}
-				}
 			}
 			if (CalculationOperators[type].precedence > topStack[1].precedence) {
 				operators.push([token, CalculationOperators[type]])
@@ -251,28 +290,34 @@ export function evaluateMath(
 	while (operators.length !== 0) {
 		values.push(operators.pop()![0])
 	}
-	console.log("V", values, operators)
-	type mathTree = { left?: mathTree[]; right: mathTree[]; operator: LexerTOKEN_TYPES } | { value: LexerToken }
-
-	const variables: (LexerToken | mathTree)[] = []
+	const variables: mathTree[] = []
 	let value: LexerToken | undefined
 	while ((value = values.shift()) !== undefined) {
 		const type = value.type
 		if (isCalculationOperator(type)) {
-			switch (CalculationOperators[type].associativity) {
-				case null:
-					const right = variables.pop()
-					if (right === undefined) {
-						parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
-						return [null, other]
-					}
-					variables.push()
-					break
+			const right = variables.pop()
+			if (right === undefined) {
+				parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
+				return [null, other]
+			}
+			if (CalculationOperators[type].associativity === null) variables.push({ right, operator: type })
+			else {
+				const left = variables.pop()
+				if (left === undefined) {
+					parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
+					return [null, other]
+				}
+				variables.push({ left, right, operator: type })
 			}
 		} else {
-			variables.push(value)
+			variables.push({ value })
 		}
 	}
-
+	console.log(variables[0])
+	if (variables.length > 1) {
+		parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
+		return [null, other]
+	}
 	return [null, other]
+
 }
