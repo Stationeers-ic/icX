@@ -1,4 +1,4 @@
-import { createMissingError, createTokenError, ERROR } from "./errors"
+import { createError, createMissingError, createTokenError, ERROR } from "./errors"
 import { LexerToken, LexerTOKEN_TYPES, lexerCalculationTokens, TokenInterface } from "./tokens"
 const temp = {
 	LEFT_PARENTHESIS: {
@@ -155,7 +155,9 @@ export function evaluateMath(
 ): [TokenInterface | null, LexerToken[]] | null {
 	const lastIndex = tokens.findIndex((x) => !(x.type in lexerCalculationTokens))
 	if (lastIndex <= 1) return null
-	let included = tokens.slice(0, lastIndex)
+	const included = tokens.slice(0, lastIndex)
+	const mathStart = included[0]?.start ?? -1
+	const mathEnd = included[included.length - 1]?.end ?? -1
 	const other = tokens.slice(lastIndex)
 	const values: LexerToken[] = []
 	const operators: [LexerToken, CalculationOperator][] = []
@@ -173,25 +175,25 @@ export function evaluateMath(
 				operators.push([token, CalculationOperators[type]])
 				continue
 			}
-			if (type === "RIGHT_PARENTHESIS") {
+			if (type === LexerTOKEN_TYPES.RIGHT_PARENTHESIS) {
 				let last: [LexerToken, CalculationOperator] | undefined
 				while ((last = operators.pop()) !== undefined) {
-					if (last[0].type === "LEFT_PARENTHESIS") break
+					if (last[0].type === LexerTOKEN_TYPES.LEFT_PARENTHESIS) break
 					values.push(last[0])
 				}
 				continue
 			}
 			const lastType = last?.type
-			if (lastType === undefined || (isCalculationOperator(lastType) && lastType !== "RIGHT_PARENTHESIS")) {
-				if (type === "ADDITION") {
+			if (lastType === undefined || (isCalculationOperator(lastType) && lastType !== LexerTOKEN_TYPES.RIGHT_PARENTHESIS)) {
+				if (type === LexerTOKEN_TYPES.ADDITION) {
 					token = {
 						...token,
-						type: "UNARY_ADDITION",
+						type: LexerTOKEN_TYPES.UNARY_ADDITION,
 					}
-				} else if (type === "SUBTRACTION") {
+				} else if (type === LexerTOKEN_TYPES.SUBTRACTION) {
 					token = {
 						...token,
-						type: "UNARY_NEGATION",
+						type: LexerTOKEN_TYPES.UNARY_NEGATION,
 					}
 				}
 			}
@@ -203,11 +205,11 @@ export function evaluateMath(
 			values.push(topStack[0])
 			operators.push([token, CalculationOperators[type]])
 		} else {
-			if (type === "COMMA") {
+			if (type === LexerTOKEN_TYPES.COMMA) {
 				parent.errors.push(createTokenError(ERROR.UnexpectedToken, token))
 				continue
 			}
-			if (type === "IDENTIFIER" && included[0]?.type === "LEFT_PARENTHESIS") {
+			if (type === LexerTOKEN_TYPES.IDENTIFIER && included[0]?.type === LexerTOKEN_TYPES.LEFT_PARENTHESIS) {
 				// find next matching right parenthesis
 				const fnTokens: LexerToken[] = [token]
 				let depth = 0
@@ -215,10 +217,10 @@ export function evaluateMath(
 					const next = included.shift()
 					if (!next) break
 					fnTokens.push(next)
-					if (next.type === "LEFT_PARENTHESIS") {
+					if (next.type === LexerTOKEN_TYPES.LEFT_PARENTHESIS) {
 						depth++
 					}
-					if (next.type === "RIGHT_PARENTHESIS") {
+					if (next.type === LexerTOKEN_TYPES.RIGHT_PARENTHESIS) {
 						depth--
 						if (depth <= 0) {
 							break
@@ -235,7 +237,7 @@ export function evaluateMath(
 				const start = fnTokens[0]?.start ?? -1
 				const end = fnTokens[fnTokens.length - 1]?.end ?? -1
 				values.push({
-					type: "FUNCTION_CALL",
+					type: LexerTOKEN_TYPES.FUNCTION_CALL,
 					start,
 					end,
 					length: end - start,
@@ -250,13 +252,25 @@ export function evaluateMath(
 		values.push(operators.pop()![0])
 	}
 	console.log("V", values, operators)
-	const variables = []
+	type mathTree = { left?: mathTree[]; right: mathTree[]; operator: LexerTOKEN_TYPES } | { value: LexerToken }
+
+	const variables: (LexerToken | mathTree)[] = []
 	let value: LexerToken | undefined
 	while ((value = values.shift()) !== undefined) {
-		if (isCalculationOperator(value.type)) {
-		} else {
-			switch (value.type) {
+		const type = value.type
+		if (isCalculationOperator(type)) {
+			switch (CalculationOperators[type].associativity) {
+				case null:
+					const right = variables.pop()
+					if (right === undefined) {
+						parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
+						return [null, other]
+					}
+					variables.push()
+					break
 			}
+		} else {
+			variables.push(value)
 		}
 	}
 
