@@ -1,10 +1,10 @@
 import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, lexerBrakeTokens, lexerSeparatorTokens, Token, TokenInterface } from "../tokens"
 import { createTokenError, ERROR, ErrorListing } from "../errors"
-import { getNextToken } from '../getNextToken';
+import { getNextToken } from "../getNextToken"
 import Identifier from "./Identifier"
 
-export class VariableDeclarator extends Token implements TokenInterface {
-	readonly type = TOKEN_TYPES.VariableDeclarator
+export class FunctionCall extends Token implements TokenInterface {
+	readonly type = TOKEN_TYPES.FunctionCall
 	readonly start: number
 	readonly end: number
 	readonly length: number
@@ -14,7 +14,7 @@ export class VariableDeclarator extends Token implements TokenInterface {
 	readonly variables: undefined
 	readonly constants: undefined
 	readonly id: Identifier
-	readonly init: TokenInterface | null
+	readonly arguments: TokenInterface[] = []
 	constructor(tokens: LexerToken[], parent: TokenInterface) {
 		super()
 		this.start = tokens[0]?.start ?? -1
@@ -27,7 +27,6 @@ export class VariableDeclarator extends Token implements TokenInterface {
 		const result = Identifier.parse([first], this)?.[0]
 		if (result === undefined || !Identifier.is(result)) throw ERROR.InvalidToken
 		this.id = result
-		this.init = this.getInit(rest)
 	}
 	private getInit(next: LexerToken[]): TokenInterface | null {
 		if (next.length === 0) return null
@@ -38,9 +37,9 @@ export class VariableDeclarator extends Token implements TokenInterface {
 		result[1].forEach((x) => this.errors.push(createTokenError(ERROR.UnexpectedToken, x)))
 		return result[0]
 	}
-	static is(token: TokenInterface | null): token is VariableDeclarator {
+	static is(token: TokenInterface | null): token is FunctionCall {
 		if (token === null) return false
-		return token.type === TOKEN_TYPES.VariableDeclarator
+		return token.type === TOKEN_TYPES.FunctionCall
 	}
 	static parse(tokens: LexerToken[], parent: TokenInterface): [TokenInterface, LexerToken[]] | null {
 		while (tokens[0]?.type in lexerSeparatorTokens && tokens.length > 0) tokens = tokens.slice(1)
@@ -52,9 +51,9 @@ export class VariableDeclarator extends Token implements TokenInterface {
 		while (!(tokens[index]?.type in lexerSeparatorTokens) && index < tokens.length) index++
 		const after = tokens.slice(0, index)
 		const other = tokens.slice(index)
-		const newToken = new VariableDeclarator(after, parent)
+		const newToken = new FunctionCall(after, parent)
 		return [newToken, other]
 	}
 }
 
-export default VariableDeclarator
+export default FunctionCall

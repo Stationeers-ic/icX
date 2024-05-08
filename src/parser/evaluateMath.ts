@@ -1,6 +1,5 @@
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES } from "../lexer"
-import { createTokenError, ERROR } from "./errors"
-import { lexerCalculationTokens, TokenInterface } from "./tokens"
+import { createMissingError, createTokenError, ERROR } from "./errors"
+import { LexerToken, LexerTOKEN_TYPES, lexerCalculationTokens, TokenInterface } from "./tokens"
 const temp = {
 	LEFT_PARENTHESIS: {
 		type: LexerTOKEN_TYPES.LEFT_PARENTHESIS,
@@ -16,6 +15,16 @@ const temp = {
 		type: LexerTOKEN_TYPES.DOT,
 		precedence: 17,
 		associativity: "left",
+	},
+	UNARY_ADDITION: {
+		type: LexerTOKEN_TYPES.UNARY_ADDITION,
+		precedence: 14,
+		associativity: null,
+	},
+	UNARY_NEGATION: {
+		type: LexerTOKEN_TYPES.UNARY_NEGATION,
+		precedence: 14,
+		associativity: null,
 	},
 	LOGICAL_NOT: {
 		type: LexerTOKEN_TYPES.LOGICAL_NOT,
@@ -136,55 +145,25 @@ type CalculationOperator<T extends keyof typeof temp = any> = {
 export const CalculationOperators: {
 	[key in keyof typeof temp]: CalculationOperator<key>
 } = temp
-function isCalculationOperator(token: string): token is keyof typeof CalculationOperators {
+function isCalculationOperator(token?: string | null): token is keyof typeof CalculationOperators {
+	if (!token) return false
 	return token in CalculationOperators
 }
-// export const CalculationOperators: {
-// 	[T exports LexerTOKEN_TYPES]: {
-// 	type: LexerTOKEN_TYPES,
-// 	precedence: number,
-// 	associativity: "left" | "right",
-// }} = {
-// 	LEFT_PARENTHESIS: LexerTOKEN_TYPES.LEFT_PARENTHESIS,
-// 	RIGHT_PARENTHESIS: LexerTOKEN_TYPES.RIGHT_PARENTHESIS,
-// 	EXPONENTIATION: LexerTOKEN_TYPES.EXPONENTIATION,
-// 	MULTIPLICATION: LexerTOKEN_TYPES.MULTIPLICATION,
-// 	DIVISION: LexerTOKEN_TYPES.DIVISION,
-// 	REMAINDER: LexerTOKEN_TYPES.REMAINDER,
-// 	ADDITION: LexerTOKEN_TYPES.ADDITION,
-// 	SUBTRACTION: LexerTOKEN_TYPES.SUBTRACTION,
-// 	LESS_THAN: LexerTOKEN_TYPES.LESS_THAN,
-// 	GREATER_THAN: LexerTOKEN_TYPES.GREATER_THAN,
-// 	EQUAL: LexerTOKEN_TYPES.EQUAL,
-// 	NOT_EQUAL: LexerTOKEN_TYPES.NOT_EQUAL,
-// 	LESS_THAN_EQUAL: LexerTOKEN_TYPES.LESS_THAN_EQUAL,
-// 	GREATER_THAN_EQUAL: LexerTOKEN_TYPES.GREATER_THAN_EQUAL,
-// 	LOGICAL_AND: LexerTOKEN_TYPES.LOGICAL_AND,
-// 	LOGICAL_OR: LexerTOKEN_TYPES.LOGICAL_OR,
-// 	LOGICAL_NOT: LexerTOKEN_TYPES.LOGICAL_NOT,
-// 	BITWISE_AND: LexerTOKEN_TYPES.BITWISE_AND,
-// 	BITWISE_OR: LexerTOKEN_TYPES.BITWISE_OR,
-// 	BITWISE_XOR: LexerTOKEN_TYPES.BITWISE_XOR,
-// 	BITWISE_NOT: LexerTOKEN_TYPES.BITWISE_NOT,
-// 	BITWISE_LEFT_SHIFT: LexerTOKEN_TYPES.BITWISE_LEFT_SHIFT,
-// 	BITWISE_RIGHT_SHIFT_ARITHMETIC: LexerTOKEN_TYPES.BITWISE_RIGHT_SHIFT_ARITHMETIC,
-// 	BITWISE_RIGHT_SHIFT_LOGICAL: LexerTOKEN_TYPES.BITWISE_RIGHT_SHIFT_LOGICAL,
-// 	TRUE: LexerTOKEN_TYPES.TRUE,
-// 	FALSE: LexerTOKEN_TYPES.FALSE,
-// } as const
 export function evaluateMath(
 	tokens: LexerToken[],
 	parent: TokenInterface,
 ): [TokenInterface | null, LexerToken[]] | null {
 	const lastIndex = tokens.findIndex((x) => !(x.type in lexerCalculationTokens))
 	if (lastIndex <= 1) return null
-	const included = tokens.slice(0, lastIndex)
+	let included = tokens.slice(0, lastIndex)
 	const other = tokens.slice(lastIndex)
 	const values: LexerToken[] = []
 	const operators: [LexerToken, CalculationOperator][] = []
-
-	while (included.length !== 0) {
-		const token = included.shift()
+	let last: LexerToken | null = null
+	let token: LexerToken | undefined | null = null
+	while (token !== undefined) {
+		last = token
+		token = included.shift()
 		if (!token) break
 		const type = token.type
 		if (!(type in lexerCalculationTokens)) throw new Error("Invalid token")
@@ -195,30 +174,91 @@ export function evaluateMath(
 				continue
 			}
 			if (type === "RIGHT_PARENTHESIS") {
-				let last:[LexerToken, CalculationOperator] | undefined
+				let last: [LexerToken, CalculationOperator] | undefined
 				while ((last = operators.pop()) !== undefined) {
-					console.log(last);
 					if (last[0].type === "LEFT_PARENTHESIS") break
 					values.push(last[0])
 				}
 				continue
 			}
+			const lastType = last?.type
+			if (lastType === undefined || (isCalculationOperator(lastType) && lastType !== "RIGHT_PARENTHESIS")) {
+				if (type === "ADDITION") {
+					token = {
+						...token,
+						type: "UNARY_ADDITION",
+					}
+				} else if (type === "SUBTRACTION") {
+					token = {
+						...token,
+						type: "UNARY_NEGATION",
+					}
+				}
+			}
 			if (CalculationOperators[type].precedence > topStack[1].precedence) {
 				operators.push([token, CalculationOperators[type]])
 				continue
 			}
-
 			operators.pop()
 			values.push(topStack[0])
 			operators.push([token, CalculationOperators[type]])
 		} else {
-			values.push(token.value)
+			if (type === "COMMA") {
+				parent.errors.push(createTokenError(ERROR.UnexpectedToken, token))
+				continue
+			}
+			if (type === "IDENTIFIER" && included[0]?.type === "LEFT_PARENTHESIS") {
+				// find next matching right parenthesis
+				const fnTokens: LexerToken[] = [token]
+				let depth = 0
+				while (included.length !== 0) {
+					const next = included.shift()
+					if (!next) break
+					fnTokens.push(next)
+					if (next.type === "LEFT_PARENTHESIS") {
+						depth++
+					}
+					if (next.type === "RIGHT_PARENTHESIS") {
+						depth--
+						if (depth <= 0) {
+							break
+						}
+					}
+				}
+				if (depth > 0)
+					parent.errors.push(
+						createMissingError(
+							fnTokens[fnTokens.length - 1]?.end ?? token.end,
+							LexerTOKEN_TYPES.RIGHT_PARENTHESIS,
+						),
+					)
+				const start = fnTokens[0]?.start ?? -1
+				const end = fnTokens[fnTokens.length - 1]?.end ?? -1
+				values.push({
+					type: "FUNCTION_CALL",
+					start,
+					end,
+					length: end - start,
+					value: fnTokens,
+				})
+				continue
+			}
+			values.push(token)
 		}
 	}
 	while (operators.length !== 0) {
 		values.push(operators.pop()![0])
 	}
-	console.log("V", values, operators);
+	console.log("V", values, operators)
+	const variables = []
+	let value: LexerToken | undefined
+	while ((value = values.shift()) !== undefined) {
+		if (isCalculationOperator(value.type)) {
+		} else {
+			switch (value.type) {
+			}
+		}
+	}
 
 	return [null, other]
 }

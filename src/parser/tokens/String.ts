@@ -1,5 +1,4 @@
-import TOKEN_TYPES, { lexerBrakeTokens, Token, TokenInterface } from "../tokens"
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES } from "../../lexer/"
+import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, lexerBrakeTokens, Token, TokenInterface } from "../tokens"
 import { createTokenError, ERROR, ErrorListing } from "../errors"
 
 export class StringToken extends Token implements TokenInterface {

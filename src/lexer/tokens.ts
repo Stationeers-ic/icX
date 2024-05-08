@@ -12,6 +12,14 @@ export const TOKEN_TYPES = {
 	INCREMENT: "INCREMENT",
 	DECREMENT: "DECREMENT",
 	ARROW: "ARROW",
+	// Relational operators
+	LESS_THAN: "LESS_THAN",
+	GREATER_THAN: "GREATER_THAN",
+	LESS_THAN_EQUAL: "LESS_THAN_EQUAL",
+	GREATER_THAN_EQUAL: "GREATER_THAN_EQUAL",
+	// Equality operators
+	EQUAL: "EQUAL",
+	NOT_EQUAL: "NOT_EQUAL",
 	//assign
 	ASSIGNMENT: "ASSIGNMENT",
 	EXPONENTIATION_ASSIGNMENT: "EXPONENTIATION_ASSIGNMENT",
@@ -37,14 +45,6 @@ export const TOKEN_TYPES = {
 	REMAINDER: "REMAINDER",
 	ADDITION: "ADDITION",
 	SUBTRACTION: "SUBTRACTION",
-	// Relational operators
-	LESS_THAN: "LESS_THAN",
-	GREATER_THAN: "GREATER_THAN",
-	LESS_THAN_EQUAL: "LESS_THAN_EQUAL",
-	GREATER_THAN_EQUAL: "GREATER_THAN_EQUAL",
-	// Equality operators
-	EQUAL: "EQUAL",
-	NOT_EQUAL: "NOT_EQUAL",
 	// Logical operators
 	LOGICAL_AND: "LOGICAL_AND",
 	LOGICAL_OR: "LOGICAL_OR",
@@ -106,7 +106,7 @@ export const TOKENS: Array<
 			patternType: "function"
 			pattern: (position: number, total: string) => [length: number, value: any, error?: string] | null
 	  }
-	> = [
+> = [
 	{
 		token: TOKEN_TYPES.EOF,
 		patternType: "string",
@@ -189,6 +189,36 @@ export const TOKENS: Array<
 			if (match === null) return null
 			return [match[0].length, match[0].slice(2)]
 		},
+	},
+	{
+		token: TOKEN_TYPES.LESS_THAN,
+		patternType: "string",
+		pattern: "<",
+	},
+	{
+		token: TOKEN_TYPES.GREATER_THAN,
+		patternType: "string",
+		pattern: ">",
+	},
+	{
+		token: TOKEN_TYPES.LESS_THAN_EQUAL,
+		patternType: "string",
+		pattern: "<=",
+	},
+	{
+		token: TOKEN_TYPES.GREATER_THAN_EQUAL,
+		patternType: "string",
+		pattern: ">=",
+	},
+	{
+		token: TOKEN_TYPES.EQUAL,
+		patternType: "string",
+		pattern: "==",
+	},
+	{
+		token: TOKEN_TYPES.NOT_EQUAL,
+		patternType: "string",
+		pattern: "!=",
 	},
 	{
 		token: TOKEN_TYPES.ASSIGNMENT,
@@ -294,36 +324,6 @@ export const TOKENS: Array<
 		token: TOKEN_TYPES.SUBTRACTION,
 		patternType: "string",
 		pattern: "-",
-	},
-	{
-		token: TOKEN_TYPES.LESS_THAN,
-		patternType: "string",
-		pattern: "<",
-	},
-	{
-		token: TOKEN_TYPES.GREATER_THAN,
-		patternType: "string",
-		pattern: ">",
-	},
-	{
-		token: TOKEN_TYPES.LESS_THAN_EQUAL,
-		patternType: "string",
-		pattern: "<=",
-	},
-	{
-		token: TOKEN_TYPES.GREATER_THAN_EQUAL,
-		patternType: "string",
-		pattern: ">=",
-	},
-	{
-		token: TOKEN_TYPES.EQUAL,
-		patternType: "string",
-		pattern: "==",
-	},
-	{
-		token: TOKEN_TYPES.NOT_EQUAL,
-		patternType: "string",
-		pattern: "!=",
 	},
 	{
 		token: TOKEN_TYPES.LOGICAL_AND,
@@ -509,7 +509,7 @@ export const TOKENS: Array<
 		},
 	},
 ]
-const arr: string[] = ["EOF", "ERROR", "UNKNOWN"]
+const arr: string[] = ["ERROR", "UNKNOWN"]
 for (const i in TOKENS) {
 	arr.push(TOKENS[i].token)
 }

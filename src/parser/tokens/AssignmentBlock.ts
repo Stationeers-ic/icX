@@ -1,8 +1,6 @@
-import TOKEN_TYPES, { lexerBrakeTokens, lexerSeparatorTokens, Token, TokenInterface } from "../tokens"
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES } from "../../lexer/"
+import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, lexerBrakeTokens, lexerSeparatorTokens, Token, TokenInterface } from "../tokens"
 import { createTokenError, ERROR, ErrorListing } from "../errors"
 import { getNextToken } from "../getNextToken"
-import Identifier from "./Identifier"
 import { getDefault } from "../helpers"
 import VariableAssignment from "./VariableAssignment"
 

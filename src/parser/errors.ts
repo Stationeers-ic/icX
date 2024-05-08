@@ -1,4 +1,4 @@
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES } from "../lexer"
+import { LexerToken, LexerTOKEN_TYPES } from "./tokens"
 const temp = {
 	EOFNotFound: {
 		name: "EOFNotFound",
@@ -12,9 +12,9 @@ const temp = {
 		name: "UnexpectedToken",
 		message: "cannot form Program: unexpected token",
 	},
-	NoToken: {
-		name: "NoToken",
-		message: "cannot form Program: no token",
+	MissingToken: {
+		name: "MissingToken",
+		message: "cannot form Program: Missing Token",
 	},
 } as const
 
@@ -41,6 +41,9 @@ export function createTokenError(
 ): ErrorListing {
 	if (expected) return { error, start: token.start, end: token.end, token, expected }
 	return { error, start: token.start, end: token.end, token }
+}
+export function createMissingError(position: number, expected: LexerTOKEN_TYPES): ErrorListing {
+	return { error: ERROR.MissingToken, start: position, end: position, expected }
 }
 export function createError(error: (typeof ERROR)[keyof typeof ERROR], start: number, end: number): ErrorListing {
 	return { error, start, end }

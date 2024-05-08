@@ -1,5 +1,4 @@
-import TOKEN_TYPES, { Token, TokenInterface } from "../tokens"
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES } from "../../lexer/"
+import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, Token, TokenInterface } from "../tokens"
 import { ERROR, ErrorListing } from "../errors"
 import { getNextToken } from "../getNextToken"
 

@@ -1,15 +1,15 @@
-
-import TOKEN_TYPES, { lexerCalculationTokens, Token, TokenInterface } from "./tokens"
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES } from "../lexer"
+import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, isLexerToken, lexerCalculationTokens, Token, TokenInterface } from "./tokens"
 import { createTokenError, ERROR, ErrorListing } from "./errors"
-import { parse } from '../lexer/index';
 import VariableDeclaration from "./tokens/VariableDeclaration"
 import Identifier from "./tokens/Identifier"
 import StringToken from "./tokens/String"
 import NumberToken from "./tokens/Number"
 import { evaluateMath } from "./evaluateMath"
 
-export function getNextToken(tokens: LexerToken[], parent: TokenInterface): [TokenInterface | null, LexerToken[]] | null {
+export function getNextToken(
+	tokens: LexerToken[],
+	parent: TokenInterface,
+): [TokenInterface | null, LexerToken[]] | null {
 	const token = tokens[0]
 	if (token === undefined) return null
 	const nextTokens = tokens.slice(1)

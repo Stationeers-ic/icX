@@ -3,12 +3,12 @@ import { TOKENS, TOKEN_TYPES } from "./tokens"
 
 const text = `x = "hello "" world`
 export {TOKEN_TYPES}
-export type Token = {
-	type: TOKEN_TYPES
+export type Token<T = TOKEN_TYPES, V = any> = {
+	type: T
 	start: number
 	end: number
 	length: number
-	value?: any
+	value?: V
 }
 
 //name function

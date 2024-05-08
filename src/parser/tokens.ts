@@ -1,8 +1,23 @@
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES  } from "../lexer"
+import { type Token as _LexerToken, TOKEN_TYPES as _LexerTOKEN_TYPES  } from "../lexer"
 import { ErrorListing } from "./errors"
-// export interface TokenInterface = BToken
 
-
+export type ExtendedLexerToken = _LexerToken<"FUNCTION_CALL"> | _LexerToken<"UNARY_ADDITION"> | _LexerToken<"UNARY_NEGATION">
+export type LexerToken = _LexerToken | ExtendedLexerToken
+export const LexerTOKEN_TYPES = {
+	..._LexerTOKEN_TYPES,
+	FUNCTION_CALL: "FUNCTION_CALL",
+	UNARY_ADDITION: "UNARY_ADDITION",
+	UNARY_NEGATION: "UNARY_NEGATION",
+} as const
+export type LexerTOKEN_TYPES = (typeof LexerTOKEN_TYPES)[keyof typeof LexerTOKEN_TYPES]
+export function isLexerToken(x?: LexerToken | null): x is _LexerToken {
+	if (!x) return false
+	return x?.type in _LexerTOKEN_TYPES
+}
+export function isLexerTOKEN_TYPES(x?: LexerTOKEN_TYPES | null): x is _LexerTOKEN_TYPES {
+	if (!x) return false
+	return x in _LexerTOKEN_TYPES
+}
 export interface TokenInterface {
 	type: TOKEN_TYPES
 	start: number
@@ -29,6 +44,7 @@ export const TOKEN_TYPES = {
 	Identifier: "Identifier",
 	StringToken: "StringToken",
 	NumberToken: "NumberToken",
+	FunctionCall: "FunctionCall",
 } as const
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
 export default TOKEN_TYPES
@@ -73,6 +89,7 @@ export const lexerCalculationTokens = {
 	FALSE: LexerTOKEN_TYPES.FALSE,
 	NUMBER: LexerTOKEN_TYPES.NUMBER,
 	IDENTIFIER: LexerTOKEN_TYPES.IDENTIFIER,
+	COMMA: LexerTOKEN_TYPES.COMMA
 } as const
 export type lexerCalculationTokens = (typeof lexerCalculationTokens)[keyof typeof lexerCalculationTokens]
 

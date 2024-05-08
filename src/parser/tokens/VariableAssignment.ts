@@ -1,5 +1,4 @@
-import TOKEN_TYPES, { lexerBrakeTokens, lexerSeparatorTokens, Token, TokenInterface } from "../tokens"
-import { type Token as LexerToken, TOKEN_TYPES as LexerTOKEN_TYPES } from "../../lexer/"
+import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, lexerBrakeTokens, lexerSeparatorTokens, Token, TokenInterface } from "../tokens"
 import { createTokenError, ERROR, ErrorListing } from "../errors"
 import { getNextToken } from "../getNextToken"
 import Identifier from "./Identifier"
@@ -32,7 +31,7 @@ export class VariableAssignment extends Token implements TokenInterface {
 	}
 	private getValue(next: LexerToken[]): TokenInterface | null {
 		if (next.length === 0) {
-			this.errors.push({ error: ERROR.NoToken, start: this.end, end: this.end })
+			this.errors.push({ error: ERROR.MissingToken, start: this.end, end: this.end })
 			return null
 		}
 		const result = getNextToken(next, this)
