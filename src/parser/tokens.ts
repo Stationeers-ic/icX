@@ -1,7 +1,10 @@
 import { type Token as _LexerToken, TOKEN_TYPES as _LexerTOKEN_TYPES  } from "../lexer"
 import { ErrorListing } from "./errors"
 
-export type ExtendedLexerToken = _LexerToken<"FUNCTION_CALL"> | _LexerToken<"UNARY_ADDITION"> | _LexerToken<"UNARY_NEGATION">
+export type ExtendedLexerToken =
+	| _LexerToken<"FUNCTION_CALL", LexerToken[]>
+	| _LexerToken<"UNARY_ADDITION">
+	| _LexerToken<"UNARY_NEGATION">
 export type LexerToken = _LexerToken | ExtendedLexerToken
 export const LexerTOKEN_TYPES = {
 	..._LexerTOKEN_TYPES,
