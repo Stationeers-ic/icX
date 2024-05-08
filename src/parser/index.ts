@@ -2,7 +2,7 @@ import { parse } from "../lexer"
 import { type Token as LexerToken } from "../lexer/"
 import Program from "./tokens/Program"
 
-const code = `z=z()`
+const code = `1 -(5 + 1)*2`
 console.log(parse(code))
 console.log("____________")
 const p = Program.parseProgram(parse(code)[0])

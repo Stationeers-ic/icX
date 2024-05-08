@@ -58,6 +58,8 @@ function getNextToken(
 }
 // console.log(extractTextBetween(1, "1'word\\'end'd", "'", "'", ["\\'"], ["\n"]))
 export function parse(text: string) {
+	// add EOF (ETX) to properly generate last token and add EOF token
+	text += "\u0003"
 	let index = 0
 	const tokens: Token[] = []
 	const errors: Token[] = []
@@ -81,12 +83,16 @@ export function parse(text: string) {
 			length: index - start,
 		}
 		tokens.push(next)
+		if (next.type === TOKEN_TYPES.EOF) {
+			next.end = next.start
+			next.length = 0
+			break
+		}
 		const err = nextToken[2]
 		if (err)
 			errors.push(...err)
 
 	}
-	tokens.push({ type: TOKEN_TYPES.EOF, start: index, end: index, length: 0 })
 	return [tokens, errors]
 }
 

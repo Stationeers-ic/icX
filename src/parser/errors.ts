@@ -20,7 +20,7 @@ const temp = {
 
 export const ERROR: {
 	[key in keyof typeof temp]: {
-		name: string
+		name: key
 		message: string
 	}
 } = temp
@@ -39,7 +39,8 @@ export function createTokenError(
 	token: LexerToken,
 	expected?: LexerTOKEN_TYPES,
 ): ErrorListing {
-	return { error, start: token.start, end: token.end, token, expected }
+	if (expected) return { error, start: token.start, end: token.end, token, expected }
+	return { error, start: token.start, end: token.end, token }
 }
 export function createError(error: (typeof ERROR)[keyof typeof ERROR], start: number, end: number): ErrorListing {
 	return { error, start, end }

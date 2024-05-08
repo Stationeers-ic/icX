@@ -48,6 +48,7 @@ export const lexerCalculationTokens = {
 	RIGHT_PARENTHESIS: LexerTOKEN_TYPES.RIGHT_PARENTHESIS,
 	EXPONENTIATION: LexerTOKEN_TYPES.EXPONENTIATION,
 	MULTIPLICATION: LexerTOKEN_TYPES.MULTIPLICATION,
+	DOT: LexerTOKEN_TYPES.DOT,
 	DIVISION: LexerTOKEN_TYPES.DIVISION,
 	REMAINDER: LexerTOKEN_TYPES.REMAINDER,
 	ADDITION: LexerTOKEN_TYPES.ADDITION,
@@ -73,3 +74,5 @@ export const lexerCalculationTokens = {
 	NUMBER: LexerTOKEN_TYPES.NUMBER,
 	IDENTIFIER: LexerTOKEN_TYPES.IDENTIFIER,
 } as const
+export type lexerCalculationTokens = (typeof lexerCalculationTokens)[keyof typeof lexerCalculationTokens]
+

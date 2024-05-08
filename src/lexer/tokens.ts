@@ -33,7 +33,7 @@ export const TOKEN_TYPES = {
 	// Arithmetic operators
 	EXPONENTIATION: "EXPONENTIATION",
 	MULTIPLICATION: "MULTIPLICATION",
-	DIVISION: "DIVIDE",
+	DIVISION: "DIVISION",
 	REMAINDER: "REMAINDER",
 	ADDITION: "ADDITION",
 	SUBTRACTION: "SUBTRACTION",
@@ -106,7 +106,12 @@ export const TOKENS: Array<
 			patternType: "function"
 			pattern: (position: number, total: string) => [length: number, value: any, error?: string] | null
 	  }
-> = [
+	> = [
+	{
+		token: TOKEN_TYPES.EOF,
+		patternType: "string",
+		pattern: "\u0003",
+	},
 	{
 		token: TOKEN_TYPES.NEWLINE,
 		patternType: "string",

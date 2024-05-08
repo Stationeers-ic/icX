@@ -7,6 +7,7 @@ import VariableDeclaration from "./tokens/VariableDeclaration"
 import Identifier from "./tokens/Identifier"
 import StringToken from "./tokens/String"
 import NumberToken from "./tokens/Number"
+import { evaluateMath } from "./evaluateMath"
 
 export function getNextToken(tokens: LexerToken[], parent: TokenInterface): [TokenInterface | null, LexerToken[]] | null {
 	const token = tokens[0]
@@ -14,6 +15,8 @@ export function getNextToken(tokens: LexerToken[], parent: TokenInterface): [Tok
 	const nextTokens = tokens.slice(1)
 	if (token.type in lexerCalculationTokens) {
 		// evaluate math
+		const math = evaluateMath(tokens, parent)
+		if (math !== null) return math
 		console.log("evaluate math")
 	}
 	switch (token.type) {
