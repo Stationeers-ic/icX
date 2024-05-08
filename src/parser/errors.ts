@@ -16,6 +16,10 @@ const temp = {
 		name: "MissingToken",
 		message: "cannot form Program: Missing Token",
 	},
+	CannotFormMath: {
+		name: "CannotFormMath",
+		message: "cannot form math",
+	},
 } as const
 
 export const ERROR: {
