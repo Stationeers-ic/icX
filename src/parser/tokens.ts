@@ -49,6 +49,7 @@ export const TOKEN_TYPES = {
 	StringToken: "StringToken",
 	NumberToken: "NumberToken",
 	FunctionCall: "FunctionCall",
+	FunctionArgument: "FunctionArgument",
 	Addition: "Addition",
 	Multiplication: "Multiplication",
 	LogicalNot: "LogicalNot",

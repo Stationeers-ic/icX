@@ -1,5 +1,6 @@
 import { createError, createMissingError, createTokenError, ERROR } from "./errors"
 import { getNextToken } from "./getNextToken"
+import { getDefault } from "./helpers"
 import { LexerToken, LexerTOKEN_TYPES, lexerCalculationTokens, TokenInterface } from "./tokens"
 import Addition from "./tokens/Addition"
 import FunctionCall from "./tokens/FunctionCall"
@@ -196,7 +197,7 @@ export function evaluateMath(
 	tokens: LexerToken[],
 	parent: TokenInterface,
 ): [TokenInterface | null, LexerToken[]] | null {
-	const lastIndex = tokens.findIndex((x) => !(x.type in lexerCalculationTokens))
+	const lastIndex = getDefault(tokens.findIndex((x) => !(x.type in lexerCalculationTokens)), tokens.length)
 	if (lastIndex <= 1) return null
 	const included = tokens.slice(0, lastIndex)
 	const mathStart = included[0]?.start ?? -1
@@ -209,10 +210,6 @@ export function evaluateMath(
 	while (token !== undefined) {
 		last = token
 		token = included.shift()
-		// console.table(operators)
-		// console.table(values)
-		// console.log("-----------")
-		// console.table(token)
 		if (!token) break
 		let type = token.type
 		if (!(type in lexerCalculationTokens)) throw new Error("Invalid token")
@@ -327,7 +324,7 @@ export function evaluateMath(
 			variables.push({ value })
 		}
 	}
-	console.log(variables[0])
+	// console.log(variables[0])
 	if (variables.length > 1) {
 		parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
 		return [null, other]

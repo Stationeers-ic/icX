@@ -1,10 +1,12 @@
 import { parse } from "../lexer"
 import Program from "./tokens/Program"
 
-const code = `(5+x())*5`
-console.log(parse(code))
+const code = `x(5+x(5*5,x,x,x), 5+5)`
+const l  = parse(code)
+console.log(l)
 console.log("____________")
-const p = Program.parseProgram(parse(code)[0])
+const p = Program.parseProgram(l[0])
+
 // console.log(p)
 console.log(p.errors)
 console.log(

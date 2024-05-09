@@ -15,8 +15,6 @@ export const TOKEN_TYPES = {
 	// Relational operators
 	LESS_THAN: "LESS_THAN",
 	GREATER_THAN: "GREATER_THAN",
-	LESS_THAN_EQUAL: "LESS_THAN_EQUAL",
-	GREATER_THAN_EQUAL: "GREATER_THAN_EQUAL",
 	// Equality operators
 	EQUAL: "EQUAL",
 	NOT_EQUAL: "NOT_EQUAL",
@@ -54,10 +52,12 @@ export const TOKEN_TYPES = {
 	BITWISE_OR: "BITWISE_OR",
 	BITWISE_XOR: "BITWISE_XOR",
 	BITWISE_NOT: "BITWISE_NOT",
+	BITWISE_RIGHT_SHIFT_LOGICAL: "BITWISE_RIGHT_SHIFT_LOGICAL",
 	BITWISE_LEFT_SHIFT: "BITWISE_LEFT_SHIFT",
 	BITWISE_RIGHT_SHIFT_ARITHMETIC: "BITWISE_RIGHT_SHIFT_ARITHMETIC",
-	BITWISE_RIGHT_SHIFT_LOGICAL: "BITWISE_RIGHT_SHIFT_LOGICAL",
 
+	LESS_THAN_EQUAL: "LESS_THAN_EQUAL",
+	GREATER_THAN_EQUAL: "GREATER_THAN_EQUAL",
 	// Keywords
 	IF: "IF",
 	ELSE: "ELSE",
@@ -182,23 +182,13 @@ export const TOKENS: Array<
 		token: TOKEN_TYPES.COMMENT,
 		patternType: "function",
 		pattern: (position, total) => {
-			const reg = /^\/\/[^\n]*/
+			const reg = /^\/\/[^\n\x03]*/
 			const match = reg.exec(total.slice(position))
 			// if start position is 0 return 0
 			// else return length of match
 			if (match === null) return null
 			return [match[0].length, match[0].slice(2)]
 		},
-	},
-	{
-		token: TOKEN_TYPES.LESS_THAN,
-		patternType: "string",
-		pattern: "<",
-	},
-	{
-		token: TOKEN_TYPES.GREATER_THAN,
-		patternType: "string",
-		pattern: ">",
 	},
 	{
 		token: TOKEN_TYPES.LESS_THAN_EQUAL,
@@ -366,14 +356,24 @@ export const TOKENS: Array<
 		pattern: "<<",
 	},
 	{
+		token: TOKEN_TYPES.BITWISE_RIGHT_SHIFT_LOGICAL,
+		patternType: "string",
+		pattern: ">>>",
+	},
+	{
 		token: TOKEN_TYPES.BITWISE_RIGHT_SHIFT_ARITHMETIC,
 		patternType: "string",
 		pattern: ">>",
 	},
 	{
-		token: TOKEN_TYPES.BITWISE_RIGHT_SHIFT_LOGICAL,
+		token: TOKEN_TYPES.LESS_THAN,
 		patternType: "string",
-		pattern: ">>>",
+		pattern: "<",
+	},
+	{
+		token: TOKEN_TYPES.GREATER_THAN,
+		patternType: "string",
+		pattern: ">",
 	},
 	{
 		token: TOKEN_TYPES.IF,
@@ -486,7 +486,7 @@ export const TOKENS: Array<
 		patternType: "function",
 		// pattern: /-?\d+(?:\.\d+)?/,
 		pattern: (position, total) => {
-			const reg = /^[+-]?\d[_\d]*(?:\.[_\d]*)?/
+			const reg = /^\d[_\d]*(?:\.[_\d]*)?/
 			const match = reg.exec(total.slice(position))
 			// if start position is 0 return 0
 			// else return length of match

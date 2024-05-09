@@ -14,6 +14,8 @@ export function extractTextBetween(
 ): [number, boolean | ExtractTextBetweenErrors] {
 	if (!text.startsWith(start, index)) return [0, true]
 	let pos = index + start.length
+	error = [...error]
+	error.push("\u0003")
 	while (pos < text.length) {
 		for (const i of error) {
 			if (text.startsWith(i, pos)) return [pos - index, extractTextBetweenERRORS.ENCOUNTERED_ERROR_CHAR]

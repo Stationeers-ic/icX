@@ -12,7 +12,7 @@ export type Token<T = TOKEN_TYPES, V = any> = {
 }
 
 //name function
-function getNextToken(
+export function getNextToken(
 	index: number,
 	text: string,
 ): [length: number, Omit<Token, "start" | "end" | "length">, error?: Token[]] | undefined {
@@ -21,7 +21,7 @@ function getNextToken(
 			if (token.pattern.length === 1 && text[index] === token.pattern) {
 				return [1, { type: token.token }]
 			} else if (text.startsWith(token.pattern, index)) {
-				if (/^[^\w]/.exec(text.slice(index + token.pattern.length)))
+				if (/^\W/.exec(text.slice(index + token.pattern.length)))
 					return [token.pattern.length, { type: token.token }]
 			}
 		} else if (token.patternType === "range") {

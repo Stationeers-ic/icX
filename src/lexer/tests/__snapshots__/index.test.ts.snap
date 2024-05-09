@@ -1,0 +1,321 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getNextToken Test 1`] = `
+[
+  1,
+  {
+    "type": "NUMBER",
+    "value": 5,
+  },
+]
+`;
+
+exports[`getNextToken Test 2`] = `
+[
+  1,
+  {
+    "type": "IDENTIFIER",
+    "value": "i",
+  },
+]
+`;
+
+exports[`parse generalTokens 100: 100 1`] = `
+[
+  [
+    {
+      "end": 3,
+      "length": 3,
+      "start": 0,
+      "type": "NUMBER",
+      "value": 100,
+    },
+    {
+      "end": 3,
+      "length": 0,
+      "start": 3,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens i100: i100 1`] = `
+[
+  [
+    {
+      "end": 4,
+      "length": 4,
+      "start": 0,
+      "type": "IDENTIFIER",
+      "value": "i100",
+    },
+    {
+      "end": 4,
+      "length": 0,
+      "start": 4,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens i 100: i 100 1`] = `
+[
+  [
+    {
+      "end": 1,
+      "length": 1,
+      "start": 0,
+      "type": "IDENTIFIER",
+      "value": "i",
+    },
+    {
+      "end": 5,
+      "length": 3,
+      "start": 2,
+      "type": "NUMBER",
+      "value": 100,
+    },
+    {
+      "end": 5,
+      "length": 0,
+      "start": 5,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens '100': '100' 1`] = `
+[
+  [
+    {
+      "end": 5,
+      "length": 5,
+      "start": 0,
+      "type": "STRING",
+      "value": "100",
+    },
+    {
+      "end": 5,
+      "length": 0,
+      "start": 5,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens "100": "100" 1`] = `
+[
+  [
+    {
+      "end": 5,
+      "length": 5,
+      "start": 0,
+      "type": "STRING",
+      "value": "100",
+    },
+    {
+      "end": 5,
+      "length": 0,
+      "start": 5,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens x(): x() 1`] = `
+[
+  [
+    {
+      "end": 1,
+      "length": 1,
+      "start": 0,
+      "type": "IDENTIFIER",
+      "value": "x",
+    },
+    {
+      "end": 2,
+      "length": 1,
+      "start": 1,
+      "type": "LEFT_PARENTHESIS",
+    },
+    {
+      "end": 3,
+      "length": 1,
+      "start": 2,
+      "type": "RIGHT_PARENTHESIS",
+    },
+    {
+      "end": 3,
+      "length": 0,
+      "start": 3,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens 5+x (5-5): 5+x (5-5) 1`] = `
+[
+  [
+    {
+      "end": 1,
+      "length": 1,
+      "start": 0,
+      "type": "NUMBER",
+      "value": 5,
+    },
+    {
+      "end": 2,
+      "length": 1,
+      "start": 1,
+      "type": "ADDITION",
+    },
+    {
+      "end": 3,
+      "length": 1,
+      "start": 2,
+      "type": "IDENTIFIER",
+      "value": "x",
+    },
+    {
+      "end": 5,
+      "length": 1,
+      "start": 4,
+      "type": "LEFT_PARENTHESIS",
+    },
+    {
+      "end": 6,
+      "length": 1,
+      "start": 5,
+      "type": "NUMBER",
+      "value": 5,
+    },
+    {
+      "end": 7,
+      "length": 1,
+      "start": 6,
+      "type": "SUBTRACTION",
+    },
+    {
+      "end": 8,
+      "length": 1,
+      "start": 7,
+      "type": "NUMBER",
+      "value": 5,
+    },
+    {
+      "end": 9,
+      "length": 1,
+      "start": 8,
+      "type": "RIGHT_PARENTHESIS",
+    },
+    {
+      "end": 9,
+      "length": 0,
+      "start": 9,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens +x: +x 1`] = `
+[
+  [
+    {
+      "end": 1,
+      "length": 1,
+      "start": 0,
+      "type": "ADDITION",
+    },
+    {
+      "end": 2,
+      "length": 1,
+      "start": 1,
+      "type": "IDENTIFIER",
+      "value": "x",
+    },
+    {
+      "end": 2,
+      "length": 0,
+      "start": 2,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens x+: x+ 1`] = `
+[
+  [
+    {
+      "end": 1,
+      "length": 1,
+      "start": 0,
+      "type": "IDENTIFIER",
+      "value": "x",
+    },
+    {
+      "end": 2,
+      "length": 1,
+      "start": 1,
+      "type": "ADDITION",
+    },
+    {
+      "end": 2,
+      "length": 0,
+      "start": 2,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens x: x 1`] = `
+[
+  [
+    {
+      "end": 1,
+      "length": 1,
+      "start": 0,
+      "type": "IDENTIFIER",
+      "value": "x",
+    },
+    {
+      "end": 1,
+      "length": 0,
+      "start": 1,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;
+
+exports[`parse generalTokens empty 1`] = `
+[
+  [
+    {
+      "end": 0,
+      "length": 0,
+      "start": 0,
+      "type": "EOF",
+    },
+  ],
+  [],
+]
+`;

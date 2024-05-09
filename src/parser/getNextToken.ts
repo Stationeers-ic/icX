@@ -12,6 +12,7 @@ import Identifier from "./tokens/Identifier"
 import StringToken from "./tokens/String"
 import NumberToken from "./tokens/Number"
 import { evaluateMath } from "./evaluateMath"
+import FunctionCall from "./tokens/FunctionCall"
 
 export function getNextToken(
 	tokens: LexerToken[],
@@ -24,7 +25,6 @@ export function getNextToken(
 		// evaluate math
 		const math = evaluateMath(tokens, parent)
 		if (math !== null) return math
-		console.log("evaluate math")
 	}
 	switch (token.type) {
 		case LexerTOKEN_TYPES.LET:
@@ -35,6 +35,8 @@ export function getNextToken(
 			return StringToken.parse(tokens, parent)
 		case LexerTOKEN_TYPES.NUMBER:
 			return NumberToken.parse(tokens, parent)
+		case LexerTOKEN_TYPES.FUNCTION_CALL:
+			return FunctionCall.parse(tokens, parent)
 		case LexerTOKEN_TYPES.EOF:
 			return null
 		default:
