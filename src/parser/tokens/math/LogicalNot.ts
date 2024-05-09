@@ -1,5 +1,7 @@
-import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, Token, TokenInterface } from "../tokens"
-import { getNextTokenFromMathTree, mathTree } from "../evaluateMath"
+import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, Token, TokenInterface } from "../../tokens"
+import { type mathTree } from "../../evaluateMath"
+import { getNextTokenFromMathTree } from "."
+
 import { MathToken } from "./mathTokens"
 import { HalfMathToken } from "./halfMathToken"
 

@@ -1,6 +1,7 @@
-import { ERROR, ErrorListing } from "../errors"
-import { getNextTokenFromMathTree, mathTree } from "../evaluateMath"
-import { LexerToken, TokenInterface } from "../tokens"
+import { ERROR, ErrorListing } from "../../errors"
+import { type mathTree } from "../../evaluateMath"
+import { getNextTokenFromMathTree } from "."
+import { LexerToken, TokenInterface } from "../../tokens"
 
 export class HalfMathToken {
 	readonly start: number

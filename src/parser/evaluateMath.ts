@@ -1,11 +1,8 @@
 import { createError, createMissingError, createTokenError, ERROR } from "./errors"
-import { getNextToken } from "./getNextToken"
 import { getDefault } from "./helpers"
 import { LexerToken, LexerTOKEN_TYPES, lexerCalculationTokens, TokenInterface } from "./tokens"
-import Addition from "./tokens/Addition"
 import FunctionCall from "./tokens/FunctionCall"
-import LogicalNot from "./tokens/LogicalNot"
-import Multiplication from "./tokens/Multiplication"
+import { getNextTokenFromMathTree } from "./tokens/math"
 
 export type mathTree =
 	| { left?: mathTree; right: mathTree; operator: LexerTOKEN_TYPES; token: LexerToken }
@@ -161,49 +158,8 @@ function isCalculationOperator(token?: string | null): token is keyof typeof Cal
 	return token in CalculationOperators
 }
 
-export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface): TokenInterface | null {
-	if ("value" in tree) {
-		const r = getNextToken([tree.value], parent)
-		if (r === null) {
-			parent.errors.push(createTokenError(ERROR.UnexpectedToken, tree.value))
-			return null
-		}
-		const [token, lexer] = r
-		lexer.forEach((x) => parent.errors.push(createTokenError(ERROR.UnexpectedToken, x)))
-		if (token === null) {
-			parent.errors.push(createTokenError(ERROR.UnexpectedToken, tree.value))
-			return null
-		}
-		return token
-	}
-	if (tree.left === undefined) {
-		switch (tree.operator) {
-			case LexerTOKEN_TYPES.LOGICAL_NOT:
-				return new LogicalNot(tree.right, parent, tree.token)
-		}
-		return null
-	}
-	switch (tree.operator) {
-		case LexerTOKEN_TYPES.ADDITION:
-			return new Addition(tree.left, tree.right, parent)
-		case LexerTOKEN_TYPES.MULTIPLICATION:
-			return new Multiplication(tree.left, tree.right, parent)
-	}
-
-	return null
-}
-
-export function evaluateMath(
-	tokens: LexerToken[],
-	parent: TokenInterface,
-): [TokenInterface | null, LexerToken[]] | null {
-	const lastIndex = getDefault(tokens.findIndex((x) => !(x.type in lexerCalculationTokens)), tokens.length)
-	if (lastIndex <= 1) return null
-	const included = tokens.slice(0, lastIndex)
-	const mathStart = included[0]?.start ?? -1
-	const mathEnd = included[included.length - 1]?.end ?? -1
-	const other = tokens.slice(lastIndex)
-	const values: LexerToken[] = []
+export function shuntingYarn(included: LexerToken[], parent: TokenInterface) {
+	const output: LexerToken[] = []
 	const operators: [LexerToken, CalculationOperator][] = []
 	let last: LexerToken | null = null
 	let token: LexerToken | undefined | null = null
@@ -216,6 +172,7 @@ export function evaluateMath(
 		const topStack = operators[operators.length - 1]
 		if (isCalculationOperator(type)) {
 			const lastType = last?.type
+			// convert + and - to unary + and - if they are after calculationToken
 			if (
 				lastType === undefined ||
 				(isCalculationOperator(lastType) && lastType !== LexerTOKEN_TYPES.RIGHT_PARENTHESIS)
@@ -234,34 +191,49 @@ export function evaluateMath(
 					type = LexerTOKEN_TYPES.UNARY_NEGATION
 				}
 			}
+			// if operators stack is empty add
 			if (topStack === undefined) {
 				operators.push([token, CalculationOperators[type]])
 				continue
 			}
+			// if this is closing parenthesis pop all operators to values until left parenthesis is found
 			if (type === LexerTOKEN_TYPES.RIGHT_PARENTHESIS) {
 				let last: [LexerToken, CalculationOperator] | undefined
 				while ((last = operators.pop()) !== undefined) {
 					if (last[0].type === LexerTOKEN_TYPES.LEFT_PARENTHESIS) break
-					values.push(last[0])
+					output.push(last[0])
 				}
 				continue
 			}
+			// add to value stack if this is higher precedence than top of operator stack
 			if (CalculationOperators[type].precedence > topStack[1].precedence) {
 				operators.push([token, CalculationOperators[type]])
 				continue
 			}
+
+			let i = operators[operators.length - 1]
+			// while precedence is same or lower
+			// pop operators to values until top of operator stack is higher precedence
+			// while ((i = operators[operators.length - 1]) !== undefined) {
+			// 	if (i[1].precedence >= CalculationOperators[type].precedence) break
+			// 	if (i[0].type === LexerTOKEN_TYPES.LEFT_PARENTHESIS) break
+			// 	output.push(operators.pop()![0])
+			// }
 			operators.pop()
-			values.push(topStack[0])
+			output.push(topStack[0])
+			// add operator to stack
 			operators.push([token, CalculationOperators[type]])
 		} else {
+			// if comma ignore and add error
 			if (type === LexerTOKEN_TYPES.COMMA) {
 				parent.errors.push(createTokenError(ERROR.UnexpectedToken, token))
 				continue
 			}
+			// if function call create FUNCTION_CALL token
 			if (type === LexerTOKEN_TYPES.IDENTIFIER && included[0]?.type === LexerTOKEN_TYPES.LEFT_PARENTHESIS) {
-				// find next matching right parenthesis
 				const fnTokens: LexerToken[] = [token]
 				let depth = 0
+				// find next matching right parenthesis
 				while (included.length !== 0) {
 					const next = included.shift()
 					if (!next) break
@@ -276,6 +248,7 @@ export function evaluateMath(
 						}
 					}
 				}
+				// if missing closing parenthesis add error
 				if (depth > 0)
 					parent.errors.push(
 						createMissingError(
@@ -285,7 +258,8 @@ export function evaluateMath(
 					)
 				const start = fnTokens[0]?.start ?? -1
 				const end = fnTokens[fnTokens.length - 1]?.end ?? -1
-				values.push({
+				// add function call token to output
+				output.push({
 					type: LexerTOKEN_TYPES.FUNCTION_CALL,
 					start,
 					end,
@@ -294,13 +268,18 @@ export function evaluateMath(
 				})
 				continue
 			}
-			values.push(token)
+			output.push(token)
 		}
 	}
+	// add remaining operators to output
 	while (operators.length !== 0) {
-		values.push(operators.pop()![0])
+		output.push(operators.pop()![0])
 	}
-	const variables: mathTree[] = []
+	return output
+}
+
+export function createMathTree(values: LexerToken[], parent: TokenInterface, mathStart:number, mathEnd:number) {
+const variables: mathTree[] = []
 	let value: LexerToken | undefined
 	while ((value = values.shift()) !== undefined) {
 		const type = value.type
@@ -308,7 +287,7 @@ export function evaluateMath(
 			const right = variables.pop()
 			if (right === undefined) {
 				parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
-				return [null, other]
+				return null
 			}
 			if (CalculationOperators[type].associativity === null)
 				variables.push({ right, operator: type, token: value })
@@ -316,7 +295,7 @@ export function evaluateMath(
 				const left = variables.pop()
 				if (left === undefined) {
 					parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
-					return [null, other]
+					return null
 				}
 				variables.push({ left, right, operator: type, token: value })
 			}
@@ -324,11 +303,31 @@ export function evaluateMath(
 			variables.push({ value })
 		}
 	}
-	// console.log(variables[0])
 	if (variables.length > 1) {
 		parent.errors.push(createError(ERROR.CannotFormMath, mathStart, mathEnd))
-		return [null, other]
+		return null
 	}
-	if (variables[0] !== undefined) return [getNextTokenFromMathTree(variables[0], parent), other]
-	return [null, other]
+	return variables[0]
+}
+export function evaluateMath(
+	tokens: LexerToken[],
+	parent: TokenInterface,
+): [TokenInterface | null, LexerToken[]] | null {
+	const lastIndex = getDefault(
+		tokens.findIndex((x) => !(x.type in lexerCalculationTokens)),
+		tokens.length,
+	)
+	// if singular calculationToken: not math problem
+	if (lastIndex <= 1) return null
+	const included = tokens.slice(0, lastIndex)
+	const mathStart = included[0]?.start ?? -1
+	const mathEnd = included[included.length - 1]?.end ?? -1
+	const other = tokens.slice(lastIndex)
+	// use shunting yard to convert to reverse polish notation
+	const values = shuntingYarn(included, parent)
+	console.log(values);
+	// create tree
+	const tree = createMathTree(values, parent, mathStart, mathEnd)
+	if (tree === null) return [null, other]
+	return [getNextTokenFromMathTree(tree, parent), other]
 }

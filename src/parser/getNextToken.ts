@@ -14,11 +14,16 @@ import NumberToken from "./tokens/Number"
 import { evaluateMath } from "./evaluateMath"
 import FunctionCall from "./tokens/FunctionCall"
 
+/**
+ *
+ * @returns {null | [TokenInterface | null, LexerToken[]]} null if no next token, otherwise [token?, next tokens]
+ */
 export function getNextToken(
 	tokens: LexerToken[],
 	parent: TokenInterface,
 ): [TokenInterface | null, LexerToken[]] | null {
 	const token = tokens[0]
+	// if no next token exit with null
 	if (token === undefined) return null
 	const nextTokens = tokens.slice(1)
 	if (token.type in lexerCalculationTokens) {
@@ -26,6 +31,7 @@ export function getNextToken(
 		const math = evaluateMath(tokens, parent)
 		if (math !== null) return math
 	}
+
 	switch (token.type) {
 		case LexerTOKEN_TYPES.LET:
 			return VariableDeclaration.parse(tokens, parent)
