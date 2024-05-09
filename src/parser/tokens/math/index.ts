@@ -1,7 +1,7 @@
 import { createTokenError, ERROR } from "../../errors"
 import { type mathTree } from "../../evaluateMath"
 import { getNextToken } from "../../getNextToken"
-import { TokenInterface, LexerTOKEN_TYPES } from "../../tokens"
+import { type TokenInterface, LexerTOKEN_TYPES } from "../../tokens"
 import Addition from "./Addition"
 import LogicalNot from "./LogicalNot"
 import Multiplication from "./Multiplication"

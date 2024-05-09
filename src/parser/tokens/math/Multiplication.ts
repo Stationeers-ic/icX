@@ -1,6 +1,5 @@
-import TOKEN_TYPES, { Token, TokenInterface } from "../../tokens"
-import { mathTree } from "../../evaluateMath"
-import { getNextTokenFromMathTree } from "."
+import TOKEN_TYPES, { type TokenInterface } from "../../tokens"
+import { type mathTree } from "../../evaluateMath"
 import { MathToken } from "./mathTokens"
 
 export class Multiplication extends MathToken implements TokenInterface {

@@ -1,8 +1,5 @@
-import TOKEN_TYPES, { LexerToken, LexerTOKEN_TYPES, Token, TokenInterface } from "../../tokens"
+import TOKEN_TYPES, { type LexerToken, type TokenInterface } from "../../tokens"
 import { type mathTree } from "../../evaluateMath"
-import { getNextTokenFromMathTree } from "."
-
-import { MathToken } from "./mathTokens"
 import { HalfMathToken } from "./halfMathToken"
 
 export class LogicalNot extends HalfMathToken implements TokenInterface {
