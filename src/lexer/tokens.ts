@@ -486,12 +486,12 @@ export const TOKENS: Array<
 		patternType: "function",
 		// pattern: /-?\d+(?:\.\d+)?/,
 		pattern: (position, total) => {
-			const reg = /^\d[_\d]*(?:\.[_\d]*)?/
+			const reg = /^\d[_\d]*(?:\.[_\d]+)?/
 			const match = reg.exec(total.slice(position))
 			// if start position is 0 return 0
 			// else return length of match
 			if (match === null) return null
-			if (isNaN(Number(match[0]))) return null
+			if (isNaN(Number(match[0].replaceAll("_", "")))) return null
 			return [match[0].length, Number(match[0])]
 		},
 	},

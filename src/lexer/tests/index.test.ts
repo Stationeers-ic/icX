@@ -94,15 +94,19 @@ describe("parse", () => {
 	describe("allFunctionTokens", () => {
 		const testCases: Record<string, [string, len: number, value:any][]> = {}
 		testCases[TOKEN_TYPES.COMMENT] = [
-			["// comment", 2],
-			["//comment\n10", 4],
+			["// comment", 2, " comment"],
+			["//comment\n10", 4, "comment"],
 		]
 		testCases[TOKEN_TYPES.NUMBER] = [
-			["9.1"]
-
-
-
-
+			["9.1", 2, 9.1],
+			["11\n33", 4, 11],
+			["1_1.1_1", 2, 11.11],
+			["10", 2, 10],
+		]
+		testCases[TOKEN_TYPES.IDENTIFIER] = [
+			["hello", 2, "hello"],
+			["h\nh", 4, "h"],
+			["h_h", 2, "h_h"],
 		]
 		const usedCases: string[] = []
 		test("TestCases", () => {
