@@ -1,6 +1,7 @@
 import { type Token as _LexerToken, TOKEN_TYPES as _LexerTOKEN_TYPES } from "../lexer"
 import { ErrorListing } from "./errors"
 import { mathTree } from "./evaluateMath"
+import { HalfMathToken } from './tokens/math/HalfMathToken';
 
 export type ExtendedLexerToken =
 	| _LexerToken<"FUNCTION_CALL", LexerToken[]>
@@ -39,7 +40,40 @@ export abstract class Token {
 	}
 }
 
+export const HalfMathTokenTOKEN_TYPES = {
+	LogicalNot: "LogicalNot",
+	BitwiseNot: "BitwiseNot",
+	UnaryPlus: "UnaryPlus",
+	UnaryMinus: "UnaryMinus",
+} as const
+export type HalfMathTokenTOKEN_TYPES = (typeof HalfMathTokenTOKEN_TYPES)[keyof typeof HalfMathTokenTOKEN_TYPES]
+export const MathOperatorTOKEN_TYPES = {
+	Exponentiation: "Exponentiation",
+	Multiplication: "Multiplication",
+	Dot: "Dot",
+	Division: "Division",
+	Remainder: "Remainder",
+	Addition: "Addition",
+	Subtraction: "Subtraction",
+	LessThan: "LessThan",
+	GreaterThan: "GreaterThan",
+	Equal: "Equal",
+	NotEqual: "NotEqual",
+	LessThanEqual: "LessThanEqual",
+	GreaterThanEqual: "GreaterThanEqual",
+	LogicalAnd: "LogicalAnd",
+	LogicalOr: "LogicalOr",
+	BitwiseAnd: "BitwiseAnd",
+	BitwiseOr: "BitwiseOr",
+	BitwiseXor: "BitwiseXor",
+	LeftShift: "LeftShift",
+	RightShiftArithmetic: "RightShiftArithmetic",
+	RightShiftLogical: "RightShiftLogical",
+} as const
+export type MathOperatorTOKEN_TYPES = (typeof MathOperatorTOKEN_TYPES)[keyof typeof MathOperatorTOKEN_TYPES]
 export const TOKEN_TYPES = {
+	...MathOperatorTOKEN_TYPES,
+	...HalfMathTokenTOKEN_TYPES,
 	Program: "Program",
 	VariableDeclaration: "VariableDeclaration",
 	VariableDeclarator: "VariableDeclarator",
@@ -50,15 +84,6 @@ export const TOKEN_TYPES = {
 	NumberToken: "NumberToken",
 	FunctionCall: "FunctionCall",
 	FunctionArgument: "FunctionArgument",
-	Exponentiation: "Exponentiation",
-	Multiplication: "Multiplication",
-	Dot: "Dot",
-	Division: "Division",
-	Remainder: "Remainder",
-	: "",
-	Addition: "Addition",
-	Subtraction: "Subtraction",
-	LogicalNot: "LogicalNot",
 } as const
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
 export default TOKEN_TYPES

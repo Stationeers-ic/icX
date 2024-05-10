@@ -1,12 +1,13 @@
 import { createTokenError, ERROR } from "../../errors"
 import { type mathTree } from "../../evaluateMath"
 import { getNextToken } from "../../getNextToken"
-import { type TokenInterface, LexerTOKEN_TYPES } from "../../tokens"
-import Addition from "./Addition"
-import LogicalNot from "./LogicalNot"
-import Multiplication from "./Multiplication"
-import Subtraction from "./Subtraction"
+import { type TokenInterface, LexerToken, LexerTOKEN_TYPES } from "../../tokens"
+import HalfMathToken from './HalfMathToken';
+import MathToken from "./MathTokens"
 
+const half = {
+
+} as const satisfies Record<LexerToken, HalfMathToken>
 
 export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface): TokenInterface | null {
 	if ("value" in tree) {
@@ -24,20 +25,9 @@ export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface)
 		return token
 	}
 	if (tree.left === undefined) {
-		switch (tree.operator) {
-			case LexerTOKEN_TYPES.LOGICAL_NOT:
-				return new LogicalNot(tree.right, parent, tree.token)
-		}
-		return null
+	return new HalfMathToken(tree.right, tree.operator, parent, tree.token)
 	}
-	switch (tree.operator) {
-		case LexerTOKEN_TYPES.ADDITION:
-			return new Addition(tree.left, tree.right, parent)
-		case LexerTOKEN_TYPES.MULTIPLICATION:
-			return new Multiplication(tree.left, tree.right, parent)
-		case LexerTOKEN_TYPES.SUBTRACTION:
-			return new Subtraction(tree.left, tree.right, parent)
-	}
+	return new MathToken(tree.left, tree.right, tree.operator, parent)
 
 	return null
 }
