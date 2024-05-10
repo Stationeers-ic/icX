@@ -5,6 +5,7 @@ import { type TokenInterface, LexerTOKEN_TYPES } from "../../tokens"
 import Addition from "./Addition"
 import LogicalNot from "./LogicalNot"
 import Multiplication from "./Multiplication"
+import Subtraction from "./Subtraction"
 
 
 export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface): TokenInterface | null {
@@ -34,6 +35,8 @@ export function getNextTokenFromMathTree(tree: mathTree, parent: TokenInterface)
 			return new Addition(tree.left, tree.right, parent)
 		case LexerTOKEN_TYPES.MULTIPLICATION:
 			return new Multiplication(tree.left, tree.right, parent)
+		case LexerTOKEN_TYPES.SUBTRACTION:
+			return new Subtraction(tree.left, tree.right, parent)
 	}
 
 	return null

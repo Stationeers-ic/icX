@@ -50,8 +50,14 @@ export const TOKEN_TYPES = {
 	NumberToken: "NumberToken",
 	FunctionCall: "FunctionCall",
 	FunctionArgument: "FunctionArgument",
-	Addition: "Addition",
+	Exponentiation: "Exponentiation",
 	Multiplication: "Multiplication",
+	Dot: "Dot",
+	Division: "Division",
+	Remainder: "Remainder",
+	: "",
+	Addition: "Addition",
+	Subtraction: "Subtraction",
 	LogicalNot: "LogicalNot",
 } as const
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
