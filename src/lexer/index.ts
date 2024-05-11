@@ -21,7 +21,9 @@ export function getNextToken(
 			if (token.pattern.length === 1 && text[index] === token.pattern) {
 				return [1, { type: token.token }]
 			} else if (text.startsWith(token.pattern, index)) {
-				if (/^\W/.exec(text.slice(index + token.pattern.length)))
+				if (/^\W/.test(token.pattern))
+					return [token.pattern.length, { type: token.token }]
+				if (/^\W/.test(text.slice(index + token.pattern.length)))
 					return [token.pattern.length, { type: token.token }]
 			}
 		} else if (token.patternType === "range") {

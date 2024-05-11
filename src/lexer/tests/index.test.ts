@@ -10,6 +10,11 @@ describe("getNextToken", () => {
 	})
 })
 describe("parse", () => {
+	test("custom", () => {
+		const c = "**x"
+		expect(parse(c)[0]?.[0]?.type).toBe(TOKEN_TYPES.EXPONENTIATION)
+		expect(parse(c)[0]?.length).toBe(3)
+	})
 	test("allStringTokens", () => {
 		TOKENS.filter((t) => t.patternType === "string").forEach((token) => {
 			try {
