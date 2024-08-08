@@ -185,7 +185,7 @@ export class icXElem { //инструкция
         let re: RegExp;
         const dots = this.parseDots(this.originalText);
         if (dots !== false) {
-            return `${dots.fn} ${dots.op1} ${dots.op2} ${dots.op3} ${dots.op4 ?? ''}`
+            return `${dots.fn} ${dots.op1} ${dots.op2} ${dots.op3} ${dots.op4 ?? ''} ${dots.op5 ?? ''}`
         }
 
         re = /([.\d\w]+)\s*(=)\s*(.+)/i
@@ -311,7 +311,7 @@ export class icXElem { //инструкция
         return this.originalText
     }
 
-    parseDots(text: string): { fn: string, op1: string | number | null, op2: string | number | null, op3: string | number | null, op4?: string | number } | false {
+    parseDots(text: string): { fn: string, op1: string | number | null, op2: string | number | null, op3: string | number | null, op4?: string | number, op5?: string | number } | false {
         let a;
         let re: RegExp;
         const byEq = text.trim().split('=');
@@ -382,8 +382,33 @@ export class icXElem { //инструкция
                     op2: vars.get(a[2]),
                     op3: vars.get(a[4]),
                 }
-            }
-            re = /([\w-]+)\s*(=)\s*d\(([\w-]+)\)\.([\w\d]+)\(([\w-]+)\)/i
+			}
+			re = /\bd\(([\w-]+)\s*,\s*(\"[\w\s-]+\")\)\.([\w-\d]+)\s*(=)\s*([\w-]+)/i
+			if (re.test(text)) {
+				a = re.exec(text);
+				if (a == null) return false
+				return {
+					fn: 'sbn',
+					op1: vars.get(a[1]),
+					op2: vars.get(`HASH(${a[2]})`),
+					op3: vars.get(a[3]),
+					op4: vars.get(a[5])
+				}
+			}
+			re = /\b([\w-]+)\s*(=)\s*d\(([\w-]+)\s*,\s*(\"[\w\s-]+\")\).([\w-]+)\(([\w-]+)\)/i
+			if (re.test(text)) {
+				a = re.exec(text);
+				if (a == null) return false
+				return {
+					fn: 'lbn',
+					op1: vars.get(a[1]),
+					op2: vars.get(a[3]),
+					op3: vars.get(`HASH(${a[4]})`),
+					op4: vars.get(a[5]),
+					op5: vars.get(a[6])
+				}
+			}
+            re = /([\w-]+)\s*(=)\s*d\(([\w-]+)\)\.([\w\d]+)\(([\w-]+)\)/i           // ???
             if (re.test(text)) {
                 a = re.exec(text);
                 if (a == null) return false
@@ -780,7 +805,7 @@ export class icXVar extends icXElem {
             const rightString = this.command.args.join('')
             const dots = this.parseDots(rightString);
             if (dots) {
-                txt += `${dots.fn} ${r} ${dots.op2} ${dots.op3} ${dots.op4 ?? ''}\n`
+                txt += `${dots.fn} ${r} ${dots.op2} ${dots.op3} ${dots.op4 ?? ''} ${dots.op5 ?? ''}\n`
             } else if (reFn.test(b[1])) {
                 const m = reFn.exec(b[1])
                 if (m) {
