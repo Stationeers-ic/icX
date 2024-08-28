@@ -71,9 +71,7 @@ export const MathOperatorTOKEN_TYPES = {
 	RightShiftLogical: "RightShiftLogical",
 } as const
 export type MathOperatorTOKEN_TYPES = (typeof MathOperatorTOKEN_TYPES)[keyof typeof MathOperatorTOKEN_TYPES]
-export const TOKEN_TYPES = {
-	...MathOperatorTOKEN_TYPES,
-	...HalfMathTokenTOKEN_TYPES,
+export const GeneralTOKEN_TYPES = {
 	Program: "Program",
 	CodeBlock: "CodeBlock",
 	VariableDeclaration: "VariableDeclaration",
@@ -89,6 +87,13 @@ export const TOKEN_TYPES = {
 	FunctionCall: "FunctionCall",
 	FunctionArgument: "FunctionArgument",
 	FunctionStatement: "FunctionStatement",
+} as const
+export type GeneralTOKEN_TYPES = (typeof GeneralTOKEN_TYPES)[keyof typeof GeneralTOKEN_TYPES]
+
+export const TOKEN_TYPES = {
+	...MathOperatorTOKEN_TYPES,
+	...HalfMathTokenTOKEN_TYPES,
+	...GeneralTOKEN_TYPES,
 } as const
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
 export default TOKEN_TYPES

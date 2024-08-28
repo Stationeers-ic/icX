@@ -12,7 +12,7 @@ export class VariableDeclaration extends Token implements TokenInterface {
 	readonly isCodeBlock: false = false
 	readonly variables: undefined
 	readonly constants: undefined
-	readonly declarations: VariableDeclarator[] = []
+	declarations: VariableDeclarator[] = []
 	constructor(tokens: LexerToken[], parent: TokenInterface) {
 		super()
 		this.start = tokens[0]?.start ?? -1

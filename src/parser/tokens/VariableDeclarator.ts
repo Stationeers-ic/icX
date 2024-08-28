@@ -21,7 +21,7 @@ export class VariableDeclarator extends Token implements TokenInterface {
 	readonly variables: undefined
 	readonly constants: undefined
 	readonly id: Identifier
-	readonly init: TokenInterface | null
+	init: TokenInterface | null
 	constructor(tokens: LexerToken[], parent: TokenInterface) {
 		super()
 		this.start = tokens[0]?.start ?? -1

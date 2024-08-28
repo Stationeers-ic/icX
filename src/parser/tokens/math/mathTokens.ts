@@ -8,13 +8,13 @@ export class MathToken implements TokenInterface {
 	readonly start: number
 	readonly end: number
 	readonly length: number
-	readonly parent: TokenInterface | null
+	readonly parent: TokenInterface
 	readonly errors: ErrorListing[]
 	readonly isCodeBlock: false = false
 	readonly variables: undefined
 	readonly constants: undefined
-	readonly left: TokenInterface
-	readonly right: TokenInterface
+	left: TokenInterface
+	right: TokenInterface
 	constructor(left: mathTree, right: mathTree, operator: MathOperatorTOKEN_TYPES, parent: TokenInterface) {
 		const l = getNextTokenFromMathTree(left, parent)
 		const r = getNextTokenFromMathTree(right, parent)

@@ -1,28 +1,13 @@
-console.log("____________")
-import { parse } from "../lexer"
+import { ERROR } from "./errors"
+import { LexerToken, LexerTOKEN_TYPES } from "./tokens"
 import Program from "./tokens/Program"
 
-const code = `1+1
-{2+2}`
-const l = parse(code)
-console.log(l)
-console.log("____________")
-const p = Program.parseProgram(l[0])
 
-// console.log(p)
-console.log(p.errors)
-console.log(
-	JSON.stringify(
-		p,
-		(key, value) =>
-			key === "parent" ||
-			key === "errors" ||
-			key === "start" ||
-			key === "end" ||
-			key === "length" ||
-			key === "isCodeBlock"
-				? undefined
-				: value,
-		2,
-	),
-)
+export function parseProgram(tokens: LexerToken[]): Program {
+	// find EOF token
+	const index = tokens.findIndex((token) => token.type === LexerTOKEN_TYPES.EOF)
+	if (index === -1) throw ERROR.MissingEOFToken
+	// cut till EOF token
+	tokens = tokens.slice(0, index + 1)
+	return new Program(tokens)
+}

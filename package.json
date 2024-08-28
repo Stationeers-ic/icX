@@ -30,7 +30,8 @@
   "dependencies": {
     "@scicave/math-parser": "^5.1.0",
     "@types/bun": "^1.0.12",
-    "crc-32": "^1.2.2"
+    "crc-32": "^1.2.2",
+    "stationeers-bitwise-functions": "^1.0.0"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

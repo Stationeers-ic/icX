@@ -12,7 +12,7 @@ export class CodeBlock extends Token implements TokenInterface {
 	readonly variables: {} = {}
 	readonly constants: {} = {}
 	readonly errors: ErrorListing[] = []
-	readonly body: Token[] = []
+	statements: TokenInterface[] = []
 	next: LexerToken[] | undefined
 	constructor(tokens: LexerToken[], parent: TokenInterface) {
 		super()
@@ -28,7 +28,7 @@ export class CodeBlock extends Token implements TokenInterface {
 			tokens = result[1]
 
 			// push to body
-			if (x !== null) this.body.push(x)
+			if (x !== null) this.statements.push(x)
 		}
 		this.next = tokens
 	}
