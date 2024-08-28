@@ -325,7 +325,6 @@ export function evaluateMath(
 	const other = tokens.slice(lastIndex)
 	// use shunting yard to convert to reverse polish notation
 	const values = shuntingYarn(included, parent)
-	console.log(values);
 	// create tree
 	const tree = createMathTree(values, parent, mathStart, mathEnd)
 	if (tree === null) return [null, other]

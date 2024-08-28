@@ -75,15 +75,20 @@ export const TOKEN_TYPES = {
 	...MathOperatorTOKEN_TYPES,
 	...HalfMathTokenTOKEN_TYPES,
 	Program: "Program",
+	CodeBlock: "CodeBlock",
 	VariableDeclaration: "VariableDeclaration",
 	VariableDeclarator: "VariableDeclarator",
 	VariableAssignment: "VariableAssignment",
+	ConstantDeclaration: "ConstantDeclaration",
+	ConstantDeclarator: "ConstantDeclarator",
+	ConstantAssignment: "ConstantAssignment",
 	AssignmentBlock: "AssignmentBlock",
 	Identifier: "Identifier",
 	StringToken: "StringToken",
 	NumberToken: "NumberToken",
 	FunctionCall: "FunctionCall",
 	FunctionArgument: "FunctionArgument",
+	FunctionStatement: "FunctionStatement",
 } as const
 export type TOKEN_TYPES = (typeof TOKEN_TYPES)[keyof typeof TOKEN_TYPES]
 export default TOKEN_TYPES

@@ -44,7 +44,6 @@ export class FunctionArgument extends Token implements TokenInterface {
 		const other = tokens.slice(splitIndex)
 		// other.forEach((x) => parent.errors.push(createTokenError(ERROR.UnexpectedToken, x)))
 		const included = tokens.slice(0, splitIndex)
-		console.log('included :>> ', included);
 		const token = getNextToken(included, parent)
 		if (token === null) return null
 		const [t, next] = token

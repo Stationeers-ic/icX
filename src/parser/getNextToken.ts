@@ -13,6 +13,8 @@ import StringToken from "./tokens/String"
 import NumberToken from "./tokens/Number"
 import { evaluateMath } from "./evaluateMath"
 import FunctionCall from "./tokens/FunctionCall"
+import ConstantDeclaration from "./tokens/ConstantDeclaration"
+import CodeBlock from "./tokens/CodeBlock"
 
 /**
  *
@@ -33,6 +35,10 @@ export function getNextToken(
 	}
 
 	switch (token.type) {
+		case LexerTOKEN_TYPES.LEFT_BRACE:
+			return CodeBlock.parse(tokens, parent)
+		case LexerTOKEN_TYPES.CONST:
+			return ConstantDeclaration.parse(tokens, parent)
 		case LexerTOKEN_TYPES.LET:
 			return VariableDeclaration.parse(tokens, parent)
 		case LexerTOKEN_TYPES.IDENTIFIER:
@@ -43,7 +49,10 @@ export function getNextToken(
 			return NumberToken.parse(tokens, parent)
 		case LexerTOKEN_TYPES.FUNCTION_CALL:
 			return FunctionCall.parse(tokens, parent)
+		// case LexerTOKEN_TYPES.IF:
+		// 	return FunctionCall.parse(tokens, parent)
 		case LexerTOKEN_TYPES.EOF:
+		case LexerTOKEN_TYPES.RIGHT_BRACE:
 			return null
 		default:
 			parent.errors.push(createTokenError(ERROR.UnexpectedToken, token))

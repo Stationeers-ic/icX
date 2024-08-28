@@ -123,9 +123,10 @@ describe("parse", () => {
 					console.log("No test cases for:", token.token)
 					throw e.message
 				}
-				testCases[token.token].forEach(([c, len]) => {
+				testCases[token.token].forEach(([c, len, val]) => {
 					try {
 						expect(parse(c)[0]?.[0]?.type).toBe(token.token)
+						expect(parse(c)[0]?.[0]?.value).toBe(val)
 						expect(parse(c)[0]?.length).toBe(len)
 					} catch (e: any) {
 						console.log("On test case:", c)

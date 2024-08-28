@@ -492,7 +492,7 @@ export const TOKENS: Array<
 			// else return length of match
 			if (match === null) return null
 			if (isNaN(Number(match[0].replaceAll("_", "")))) return null
-			return [match[0].length, Number(match[0])]
+			return [match[0].length, Number(match[0].replaceAll("_", ""))]
 		},
 	},
 	{
