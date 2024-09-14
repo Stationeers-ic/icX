@@ -80,8 +80,13 @@ const optimizations = {
 	AssignmentBlock: function (block: TokenInterface): TokenInterface {
 		throw new Error("Function not implemented.")
 	},
-	Identifier: function (block: TokenInterface): TokenInterface {
-		throw new Error("Function not implemented.")
+	Identifier: function (block: TokenInterface): Blocks["Identifier"] | null {
+		const working = Blocks.Identifier.is(block) ? block : null
+		if (working === null) {
+			console.log(`Warning: Expected Identifier block, got ${block.type}`)
+			return null
+		}
+		return working
 	},
 	StringToken: function (block: TokenInterface): TokenInterface {
 		throw new Error("Function not implemented.")
@@ -112,7 +117,6 @@ const optimizations = {
 
 		working.left = next(working.left) ?? working.left
 		working.right = next(working.right) ?? working.right
-
 		return mathSimplifier(working)
 	},
 	HalfMathToken: function (block: TokenInterface): TokenInterface {

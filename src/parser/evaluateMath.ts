@@ -279,7 +279,7 @@ export function shuntingYarn(included: LexerToken[], parent: TokenInterface) {
 }
 
 export function createMathTree(values: LexerToken[], parent: TokenInterface, mathStart:number, mathEnd:number) {
-const variables: mathTree[] = []
+	const variables: mathTree[] = []
 	let value: LexerToken | undefined
 	while ((value = values.shift()) !== undefined) {
 		const type = value.type

@@ -8,10 +8,11 @@ import { parse } from "./lexer"
 import { optimizeProgram } from "./optimizer"
 import { parseProgram } from "./parser"
 
-const code = `let x = (10 ** 2 << 2 > 1) * 100`
+const code = `1*(1)`
 const l = parse(code)
 console.log(l);
 const p = parseProgram(l[0])
+console.log(p.errors);
 console.log(
 	JSON.stringify(
 		p,

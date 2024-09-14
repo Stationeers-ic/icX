@@ -4,7 +4,7 @@ import type { LexerToken, TokenInterface } from "../parser/tokens"
 import { Blocks } from "../parser/tokens/index"
 import type MathToken from "../parser/tokens/math/MathTokens"
 
-function newNumberToken(left: Blocks["NumberToken"], right: Blocks["NumberToken"], value: number, parent: TokenInterface): Blocks["NumberToken"] {
+function newNumberToken(left: TokenInterface, right: TokenInterface, value: number, parent: TokenInterface): Blocks["NumberToken"] {
 	const len = right.end - left.start
 	const fakeToken: LexerToken = {
 		type: TOKEN_TYPES.NUMBER,
@@ -17,66 +17,86 @@ function newNumberToken(left: Blocks["NumberToken"], right: Blocks["NumberToken"
 }
 
 export function mathSimplifier(block: MathToken): Blocks["NumberToken"] | MathToken {
-	if (Blocks.NumberToken.is(block.left) && Blocks.NumberToken.is(block.right)) {
-		const left = block.left.value
-		const right = block.right.value
+	const left = block.left
+	const right = block.right
+	if (Blocks.NumberToken.is(left) && Blocks.NumberToken.is(right)) {
+		const leftValue = left.value
+		const rightValue = right.value
+		let value: number | null = null
+		console.log(`leftValue: ${leftValue}, rightValue: ${rightValue}, type: ${block.type}`);
 		switch (block.type) {
 			case "Addition":
-				return newNumberToken(block.left, block.right, left + right, block.parent)
+				value = leftValue + rightValue
+				break
 			case "Subtraction":
-				return newNumberToken(block.left, block.right, left - right, block.parent)
+				value = leftValue - rightValue
+				break
 			case "Multiplication":
-				return newNumberToken(block.left, block.right, left * right, block.parent)
+				value = leftValue * rightValue
+				break
 			case "Division":
-				return newNumberToken(block.left, block.right, left / right, block.parent)
+				value = leftValue / rightValue
+				break
 			case "Exponentiation":
-				return newNumberToken(block.left, block.right, left ** right, block.parent)
+				value = leftValue ** rightValue
+				break
 			case "Remainder":
-				let num = left % right
-				if (num < 0) num += right
-				return newNumberToken(block.left, block.right, num, block.parent)
+				value = leftValue % rightValue
+				if (value < 0) value += rightValue
+				break
 			case "LessThan":
-				return newNumberToken(block.left, block.right, Number(left < right), block.parent)
+				value = Number(leftValue < rightValue)
+				break
 			case "GreaterThan":
-				return newNumberToken(block.left, block.right, Number(left > right), block.parent)
+				value = Number(leftValue > rightValue)
+				break
 			case "Equal":
-				return newNumberToken(block.left, block.right, Number(left == right), block.parent)
+				value = Number(leftValue == rightValue)
+				break
 			case "NotEqual":
-				return newNumberToken(block.left, block.right, Number(left != right), block.parent)
+				value = Number(leftValue != rightValue)
+				break
 			case "LessThanEqual":
-				return newNumberToken(block.left, block.right, Number(left <= right), block.parent)
+				value = Number(leftValue <= rightValue)
+				break
 			case "GreaterThanEqual":
-				return newNumberToken(block.left, block.right, Number(left >= right), block.parent)
+				value = Number(leftValue >= rightValue)
+				break
 			case "LogicalAnd":
-				return newNumberToken(block.left, block.right, Number(left && right), block.parent)
+				value = Number(leftValue && rightValue)
+				break
 			case "LogicalOr":
-				return newNumberToken(block.left, block.right, Number(left || right), block.parent)
+				value = Number(leftValue || rightValue)
+				break
 			case "BitwiseAnd":
-				const andR = and(left, right)
-				if (andR === null) return block
-				return newNumberToken(block.left, block.right, andR, block.parent)
+				value = and(leftValue, rightValue)
+				break
 			case "BitwiseOr":
-				const orR = or(left, right)
-				if (orR === null) return block
-				return newNumberToken(block.left, block.right, orR, block.parent)
+				value = or(leftValue, rightValue)
+				break
 			case "BitwiseXor":
-				const xorR = xor(left, right)
-				if (xorR === null) return block
-				return newNumberToken(block.left, block.right, xorR, block.parent)
+				value = xor(leftValue, rightValue)
+				break
 			case "LeftShift":
-				const slaR = sla(left, right)
-				if (slaR === null) return block
-				return newNumberToken(block.left, block.right, slaR, block.parent)
+				value = sla(leftValue, rightValue)
+				break
 			case "RightShiftArithmetic":
-				const sraR = sra(left, right)
-				if (sraR === null) return block
-				return newNumberToken(block.left, block.right, sraR, block.parent)
+				value = sra(leftValue, rightValue)
+				break
 			case "RightShiftLogical":
-				const srlR = srl(left, right)
-				if (srlR === null) return block
-				return newNumberToken(block.left, block.right, srlR, block.parent)
+				value = srl(leftValue, rightValue)
+				break
 			default:
 				return block
+		}
+		if (value === null) return block
+		return newNumberToken(left, right, value, block.parent)
+	}
+	if (Blocks.Identifier.is(left) && Blocks.Identifier.is(right)) {
+		const leftName = left.name
+		const rightName = right.name
+		if (block.type === "Division" && leftName === rightName) {
+			return newNumberToken(left, right, 1, block.parent)
 		}
 	}
 	return block
