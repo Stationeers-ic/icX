@@ -1,0 +1,3 @@
+[run]
+shell = "bun"
+bun = true

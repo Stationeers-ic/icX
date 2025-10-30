@@ -1,5 +1,8 @@
 {
 	"compilerOptions": {
+		"outDir": "./dist/",
+		"rootDir": "./src/",
+		"declaration": true,
 		"module": "ESNext",
 		"baseUrl": ".",
 		"paths": {
@@ -13,5 +16,5 @@
 		"skipLibCheck": true,
 		"moduleResolution": "bundler"
 	},
-	"exclude": ["dist", "node_modules", "src/Defines", "src/Devices", "src/Schemas"]
+	"exclude": ["dist", "tests", "tools", "node_modules", "src/Defines", "src/Devices", "src/Schemas", "vite.config.ts"]
 }
