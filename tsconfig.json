@@ -4,6 +4,10 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"],
+			"@lexer/*": ["src/lexer/*"],
+			"@lexer": ["src/lexer/"],
+			"@ast/*": ["src/ast/*"],
+			"@ast": ["src/ast/"],
 			"@tests/*": ["tests/*"],
 			"@tools/*": ["tools/*"]
 		},
@@ -11,7 +15,8 @@
 		"target": "ESNext",
 		"allowJs": false,
 		"skipLibCheck": true,
+		"strict": true,
 		"moduleResolution": "bundler"
 	},
-	"exclude": ["dist", "node_modules", "src/Defines", "src/Devices", "src/Schemas"]
+	"exclude": ["dist", "node_modules", "src/**/*.test.ts"]
 }

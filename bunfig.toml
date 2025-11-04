@@ -1,3 +1,6 @@
 [run]
 shell = "bun"
 bun = true
+[test]
+# coverage = true
+coverageSkipTestFiles = true
